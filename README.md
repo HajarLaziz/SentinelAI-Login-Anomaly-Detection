@@ -133,3 +133,5 @@ Améliorations possibles : validation chronologique supplémentaire, profils par
 ## GitHub et licence
 
 Publication prévue : `HajarLaziz/SentinelAI-Login-Anomaly-Detection`. Le statut effectif de publication est indiqué lors de la livraison ; cette mention ne prouve pas qu’un dépôt a été créé. Une authentification GitHub du propriétaire est nécessaire. La licence reste à choisir explicitement ; aucune autorisation open source n’est présumée avant ce choix.
+
+Voir le [guide de publication et de vérification](docs/github.md) pour reprendre cette étape sans écraser de contenu distant.

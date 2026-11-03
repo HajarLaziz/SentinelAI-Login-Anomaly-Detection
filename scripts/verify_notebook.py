@@ -1,10 +1,14 @@
 """Execute all notebook cells using this environment's Python kernel."""
 import os
+import asyncio
 from pathlib import Path
 import nbformat
 from nbclient import NotebookClient
 from jupyter_client.kernelspec import KernelSpecManager
 from ipykernel.kernelspec import write_kernel_spec
+
+if os.name == 'nt':
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 root = Path(__file__).resolve().parents[1]
 runtime = root/'artifacts'/'jupyter'

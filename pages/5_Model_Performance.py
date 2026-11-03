@@ -21,10 +21,11 @@ with a:
 with b:
     comparison = pd.DataFrame(results).T[['precision','recall','f1','false_positive_rate']]
     chart(px.bar(comparison.reset_index().melt(id_vars='index'),x='variable',y='value',color='index',barmode='group',title='IA et règles — mêmes événements de test'))
-table(pd.DataFrame(results).T.drop(columns='confusion_matrix'),'metrics')
+table(pd.DataFrame(results).T.drop(columns='confusion_matrix').rename_axis('Modèle').reset_index(),'metrics')
 scored = predict(test,bundle)
 chart(px.histogram(scored,x='anomaly_score',color=scored.is_anomaly.map({0:'Normal réel',1:'Suspect réel'}),barmode='overlay',nbins=60,title='Distribution des scores par vérité terrain'))
 st.caption(f'ROC-AUC : {score.get("roc_auc",float("nan")):.3f} · Average Precision : {score.get("average_precision",float("nan")):.3f}. AP résume la courbe précision-rappel ; ce n’est pas son intégrale trapézoïdale.')
+st.caption(f'PR-AUC (intégrale trapézoïdale) : {score.get("pr_auc",float("nan")):.3f}. La différence avec AP vient de l’interpolation entre les seuils.')
 with st.expander('Sensibilité au seuil et configuration'):
     experiment = pd.DataFrame(sensitivity(pd.read_csv(DATA/'train_logs.csv'),test,bundle))
     chart(px.line(experiment,x='contamination',y=['precision','recall','f1'],markers=True,title='Exploration descriptive — aucun choix final fondé sur le test'))

@@ -1,4 +1,4 @@
-.block-container {max-width:1440px;padding-top:2rem;padding-bottom:3rem;}
+.block-container {max-width:1440px;padding-top:3.5rem;padding-bottom:3rem;}
 [data-testid="stSidebar"] {border-right:1px solid #26334a;}
 [data-testid="stMetric"] {background:#141e32;border:1px solid #27344c;border-radius:14px;padding:16px;}
 [data-testid="stMetricLabel"] {color:#9cadc5;font-size:.8rem;}
@@ -9,5 +9,6 @@ h2,h3 {letter-spacing:-.025em;}
 .hero {border:1px solid #27344c;border-left:3px solid #22d3ee;border-radius:14px;padding:20px 24px;background:#111c30;margin-bottom:24px;}
 .hero p {color:#9cadc5;margin-bottom:0;}
 .stButton>button {border-radius:9px;}
+[data-testid="stAppDeployButton"] {display:none;}
 [data-testid="stDataFrame"] {border:1px solid #27344c;border-radius:10px;}
 @media(max-width:768px){.block-container{padding:1rem;}[data-testid="stMetricValue"]{font-size:1.4rem;}}

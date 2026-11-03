@@ -7,6 +7,7 @@ from src.predict import load_model, predict
 from src.preprocessing import safe_csv
 
 COLORS = ['#22d3ee','#f59e0b','#818cf8','#fb7185','#34d399']
+px.defaults.color_discrete_sequence = COLORS
 
 def shell():
     st.markdown('<style>'+ (ROOT/'assets/style.css').read_text(encoding='utf-8')+'</style>',unsafe_allow_html=True)

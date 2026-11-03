@@ -3,7 +3,8 @@ import joblib
 import numpy as np
 import pandas as pd
 from sklearn.metrics import (confusion_matrix, precision_score, recall_score, f1_score,
-                             accuracy_score, roc_auc_score, average_precision_score)
+                             accuracy_score, roc_auc_score, average_precision_score,
+                             precision_recall_curve, auc)
 from src.preprocessing import feature_matrix
 from src.utils import DATA, MODEL, ARTIFACTS, ensure_directories
 
@@ -21,8 +22,10 @@ def metrics(y, prediction, scores=None):
                   false_positive_rate=float(fp/(tn+fp)) if tn+fp else None,
                   confusion_matrix=[[int(tn),int(fp)],[int(fn),int(tp)]])
     if scores is not None and len(np.unique(y)) == 2:
+        curve_precision, curve_recall, _ = precision_recall_curve(y, scores)
         result.update(roc_auc=float(roc_auc_score(y,scores)),
-                      average_precision=float(average_precision_score(y,scores)))
+                      average_precision=float(average_precision_score(y,scores)),
+                      pr_auc=float(auc(curve_recall, curve_precision)))
     return result
 
 def evaluate(frame, bundle):
