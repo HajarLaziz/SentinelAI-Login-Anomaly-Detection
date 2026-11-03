@@ -1,0 +1,1 @@
+"""SentinelAI : prototype pédagogique local."""
