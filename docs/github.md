@@ -1,8 +1,8 @@
-# Publication GitHub : étape en attente
+# Publication GitHub
 
-Le dépôt local contient les jalons de développement dans des commits séparés. Aucune publication n’a été effectuée : GitHub CLI a signalé l’absence d’authentification. Cela empêche de vérifier le compte, créer le dépôt public et pousser chaque jalon. Le développement local a continué conformément à l’exception demandée.
+Le dépôt public est [HajarLaziz/SentinelAI-Login-Anomaly-Detection](https://github.com/HajarLaziz/SentinelAI-Login-Anomaly-Detection). L’identité du propriétaire a été vérifiée avec GitHub CLI. Les 13 jalons locaux ont été publiés successivement après l’authentification, avec contrôle du SHA distant après chaque push. La publication avait initialement été suspendue faute d’authentification ; il ne s’agit donc pas d’une publication continue pendant la phase initiale de développement.
 
-## Authentification à effectuer par le propriétaire
+## Authentification pour les prochaines contributions
 
 Depuis la racine du projet, GitHub CLI téléchargé depuis son dépôt officiel est disponible localement (hors Git) :
 

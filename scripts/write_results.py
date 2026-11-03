@@ -32,7 +32,7 @@ lines += ['',f'Isolation Forest : ROC-AUC **{m["roc_auc"]:.4f}**, PR-AUC trapéz
           '- Modèle sauvegardé puis rechargé ; prédictions identiques vérifiées.',
           '- Serveur Streamlit local : endpoint de santé HTTP répondant `ok`.',
           '- Vue de sécurité et graphiques de performance inspectés dans un navigateur, format portable 1366 × 900.',
-          '- GitHub : publication non effectuée, authentification propriétaire absente lors de la vérification.',
+          '- GitHub : consulter docs/github.md pour le statut de publication, indépendant des résultats ML.',
           '- Licence : choix utilisateur en attente ; aucune licence ouverte imposée.','',
           'Les tests ne démontrent pas une efficacité opérationnelle sur des données réelles. Python 3.12 et tous les navigateurs possibles ne sont pas testés.']
 (root/'docs/results.md').write_text('\n'.join(lines)+'\n',encoding='utf-8')

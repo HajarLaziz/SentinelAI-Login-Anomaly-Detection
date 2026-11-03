@@ -34,7 +34,7 @@ Le classement des scores est informatif (ROC-AUC), mais le seuil fixé à 8 % pr
 - Modèle sauvegardé puis rechargé ; prédictions identiques vérifiées.
 - Serveur Streamlit local : endpoint de santé HTTP répondant `ok`.
 - Vue de sécurité et graphiques de performance inspectés dans un navigateur, format portable 1366 × 900.
-- GitHub : publication non effectuée, authentification propriétaire absente lors de la vérification.
+- GitHub : dépôt public sous HajarLaziz, jalons publiés après authentification et vérifiés individuellement.
 - Licence : choix utilisateur en attente ; aucune licence ouverte imposée.
 
 Les tests ne démontrent pas une efficacité opérationnelle sur des données réelles. Python 3.12 et tous les navigateurs possibles ne sont pas testés.
