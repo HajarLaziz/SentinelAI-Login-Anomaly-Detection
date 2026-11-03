@@ -19,10 +19,10 @@ if reset:
     st.session_state.sim_results = []
     st.session_state.sim_context = pd.DataFrame(columns=RAW_COLUMNS)
 if normal or suspect or random:
-    history = pd.concat([data[RAW_COLUMNS],st.session_state.sim_context],ignore_index=True)
+    history = pd.concat([data[RAW_COLUMNS],st.session_state.sim_context],ignore_index=True) if not st.session_state.sim_context.empty else data[RAW_COLUMNS]
     result,context = simulate(history,len(st.session_state.sim_results),'normal' if normal else 'suspect' if suspect else 'random',bundle)
     st.session_state.sim_results.append(result)
-    st.session_state.sim_context = pd.concat([st.session_state.sim_context,context],ignore_index=True)
+    st.session_state.sim_context = pd.concat([st.session_state.sim_context,context],ignore_index=True) if not st.session_state.sim_context.empty else context
 if st.session_state.sim_results:
     frame = pd.concat(st.session_state.sim_results,ignore_index=True)
     last = frame.iloc[-1]

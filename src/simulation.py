@@ -19,6 +19,8 @@ def simulate(history, sequence, mode, bundle):
             context.append(dict(event_id=f'{prefix}-CTX-{i}',user_id=user,timestamp=stamp-pd.Timedelta(seconds=(9-i)*30),source_ip=ip,device_type=device,login_success=0))
     event = dict(event_id=prefix,user_id=user,timestamp=stamp,source_ip=ip,device_type=device,login_success=1)
     extra = pd.DataFrame(context,columns=RAW_COLUMNS)
-    result = assess_event(event,pd.concat([history[RAW_COLUMNS],extra],ignore_index=True),bundle)
+    combined = pd.concat([history[RAW_COLUMNS],extra],ignore_index=True) if not extra.empty else history[RAW_COLUMNS]
+    result = assess_event(event,combined,bundle)
     result['scenario'] = 'Suspect simulé' if suspicious else 'Normal simulé'
-    return result,pd.concat([extra,pd.DataFrame([event])],ignore_index=True)
+    context = pd.concat([extra,pd.DataFrame([event])],ignore_index=True) if not extra.empty else pd.DataFrame([event])
+    return result,context

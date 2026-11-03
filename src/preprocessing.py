@@ -19,7 +19,7 @@ def validate_raw(frame: pd.DataFrame) -> pd.DataFrame:
         raise ValueError('Valeurs manquantes dans les champs obligatoires.')
     if out.event_id.duplicated().any():
         raise ValueError('Identifiants événement dupliqués.')
-    out['timestamp'] = pd.to_datetime(out.timestamp, errors='raise', utc=True).dt.tz_convert(None)
+    out['timestamp'] = pd.to_datetime(out.timestamp, errors='raise', utc=True, format='mixed').dt.tz_convert(None)
     out['login_success'] = pd.to_numeric(out.login_success, errors='raise')
     if not out.login_success.isin([0,1]).all():
         raise ValueError('login_success doit valoir 0 ou 1.')
