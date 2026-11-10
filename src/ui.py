@@ -20,7 +20,7 @@ def header(title, subtitle):
     st.caption(subtitle)
 
 def section(number, title, description=''):
-    st.markdown(f'<div class="section-heading"><span>{escape(number)}</span><div><h3>{escape(title)}</h3><p>{escape(description)}</p></div></div>',unsafe_allow_html=True)
+    st.markdown(f'<div class="section-heading"><div><h3>{escape(title)}</h3><p>{escape(description)}</p></div></div>',unsafe_allow_html=True)
 
 @st.cache_resource
 def model_cached(version):
@@ -44,12 +44,12 @@ def resources():
 
 def chart(fig):
     fig.update_layout(template='plotly_white', paper_bgcolor='#ffffff',plot_bgcolor='#ffffff',
-                      colorway=COLORS, font=dict(family='Arial',color='#796453',size=15),
-                      title=dict(font=dict(size=19,color='#3e2c23'),x=.04,y=.94),
+                      colorway=COLORS, font=dict(family='Arial',color='#716c65',size=15),
+                      title=dict(font=dict(size=19,color='#302d29'),x=.04,y=.94),
                       margin=dict(l=25,r=25,t=65,b=65),height=350,legend_title_text='',
                       legend=dict(orientation='h',y=-.22,x=0,xanchor='left',yanchor='top'))
     fig.update_xaxes(showgrid=False)
-    fig.update_yaxes(gridcolor='#eee3d6',zerolinecolor='#eee3d6')
+    fig.update_yaxes(gridcolor='#efede9',zerolinecolor='#efede9')
     st.plotly_chart(fig,use_container_width=True,theme=None,config={'displaylogo':False})
 
 def filters(frame, key):
