@@ -6,7 +6,7 @@ from src.ui import header,resources,table
 from src.predict import assess_event,predict,contributing_factors
 from src.preprocessing import read_upload
 
-header('Détection IA','Évaluer une connexion dans son contexte historique.')
+header('Détection des anomalies','Évaluer une connexion dans son contexte historique.')
 data,bundle = resources()
 a,b,c = st.columns(3)
 a.metric('Algorithme','Isolation Forest')

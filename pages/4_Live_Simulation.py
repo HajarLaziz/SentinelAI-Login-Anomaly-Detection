@@ -4,7 +4,7 @@ from src.ui import header,resources,table
 from src.simulation import simulate
 from src.preprocessing import RAW_COLUMNS
 
-header('Laboratoire de simulation','Un clic, un scénario, une décision. Aucun trafic réel ni processus continu.')
+header('Simulation de connexions','Générez des connexions fictives et consultez les résultats.')
 data,bundle = resources()
 if 'sim_results' not in st.session_state:
     st.session_state.sim_results = []
@@ -27,7 +27,7 @@ if st.session_state.sim_results:
     frame = pd.concat(st.session_state.sim_results,ignore_index=True)
     last = frame.iloc[-1]
     a,b,c,d = st.columns(4)
-    a.metric('Décision IA',last.status)
+    a.metric('Décision',last.status)
     b.metric('Score',f'{last.anomaly_score:.4f}')
     c.metric('Tentatives / 10 min',last.attempts_10min)
     d.metric('Échecs / 10 min',last.failed_attempts)
@@ -35,4 +35,4 @@ if st.session_state.sim_results:
     st.caption(f'{last.timestamp} · {last.user_id} · {last.device_type} · IP {last.source_ip} · nouvelle dans le contexte : {bool(last.new_ip)}')
     table(frame.iloc[::-1],'simulation')
 else:
-    st.markdown('<div class="hero"><b>Votre session est prête.</b><p>Générez une connexion pour observer son contexte et sa classification.</p></div>',unsafe_allow_html=True)
+    st.markdown('<div class="hero"><b>Aucun événement généré.</b><p>Générez une connexion pour observer son contexte et sa classification.</p></div>',unsafe_allow_html=True)

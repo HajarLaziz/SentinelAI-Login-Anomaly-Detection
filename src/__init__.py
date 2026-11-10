@@ -1,1 +1,1 @@
-"""Clair : prototype pédagogique local."""
+"""Le système : prototype pédagogique local."""

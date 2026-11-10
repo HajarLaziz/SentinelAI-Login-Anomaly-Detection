@@ -10,7 +10,7 @@ def code(text):
 
 markdown('''# Détection intelligente des connexions anormales par IA
 ## 1. Introduction
-Clair est un prototype pédagogique local. Toutes les connexions sont fictives.
+Le système est un prototype pédagogique local. Toutes les connexions sont fictives.
 ## 2. Objectifs
 Construire un historique causal, apprendre une représentation du comportement ordinaire,
 mesurer les erreurs et comparer Isolation Forest à des règles explicites.''')

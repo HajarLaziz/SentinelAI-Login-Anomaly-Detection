@@ -1,4 +1,4 @@
-# Clair — Analyse intelligente des connexions
+# Analyse des connexions
 
 **Détection intelligente des connexions anormales par Intelligence Artificielle**
 
@@ -6,13 +6,13 @@ Mini-projet universitaire de cybersécurité : un simulateur de journaux, un mod
 
 ## Contexte et objectif
 
-Les connexions inhabituelles peuvent justifier une vérification complémentaire : échecs répétés, activité nocturne, fréquence élevée, changement d’IP ou type de terminal inédit. Clair apprend sans étiquettes, puis compare ses alertes aux scénarios connus du simulateur. Une alerte n’est pas une preuve d’attaque.
+Les connexions inhabituelles peuvent justifier une vérification complémentaire : échecs répétés, activité nocturne, fréquence élevée, changement d’IP ou type de terminal inédit. Le système apprend sans étiquettes, puis compare ses alertes aux scénarios connus du simulateur. Une alerte n’est pas une preuve d’attaque.
 
 ## Fonctionnalités
 
 - **Vue de sécurité** : indicateurs cohérents avec les filtres, activité, répartition des décisions et événements à vérifier.
 - **Analyse des connexions** : distributions, corrélations, recherche littérale et export CSV.
-- **Détection IA** : évaluation manuelle avec historique causal, score et percentile relatif ; import de CSV fictifs validés.
+- **Détection des anomalies** : évaluation manuelle avec historique causal, score et percentile relatif ; import de CSV fictifs validés.
 - **Simulation** : événements normaux, suspects ou aléatoires ; contexte explicite et réinitialisation de session.
 - **Performance** : matrice de confusion, précision, rappel, F1, accuracy, ROC-AUC, Average Precision, comparaison aux règles et sensibilité au seuil.
 
@@ -22,7 +22,9 @@ L’interface claire associe un fond blanc perlé, du vert d’eau, de la lavand
 
 Python 3.11 (version testée), Pandas 2.3.3, NumPy 2.2.6, Scikit-learn 1.7.2, Streamlit 1.50.0, Plotly 6.3.1, Joblib 1.5.2 et pytest 8.4.2. Les versions directes sont fixées dans `requirements.txt`. Les outils du notebook sont également inclus. Python 3.12 est une cible compatible mais doit être vérifié dans son propre environnement.
 
-## Identité visuelle Clair
+## Interface
+
+L’interface ne porte aucun nom de produit. Les textes courants utilisent une taille moyenne de 15–16 px et les intitulés décrivent directement les fonctions.
 
 Refonte du 10 novembre 2026 : thème clair, navigation avec icônes, cartes aux accents pastel, graphique d’activité et anneau de répartition côte à côte, sections numérotées et formulaires sur fond blanc. Les cinq pages utilisent les mêmes composants visuels. La capture conservée dans `docs/screenshots/overview.jpg` est une archive de l’ancienne interface, pas une capture de cette refonte.
 
@@ -75,7 +77,7 @@ Les événements simultanés ne se voient pas mutuellement. Les utilisateurs inc
 
 Le pipeline médiane + Isolation Forest reçoit sept caractéristiques numériques : heure sin/cos, compteurs récents, changement et nouveauté IP, nouveauté du type de terminal. Il apprend sur tout l’historique d’entraînement majoritairement normal, sans utiliser les labels. Paramètres : 200 arbres, sous-échantillon 256, contamination 8 %, graine 42.
 
-`predict()` retourne +1 pour un inlier et −1 pour un outlier. Clair affiche 0 et 1. Le score présenté vaut `−decision_function` : un score strictement positif dépasse le seuil d’anomalie. Le percentile situe ce score dans le train ; **ce n’est pas une probabilité d’attaque**. Voir la [documentation officielle de l’algorithme](https://scikit-learn.org/1.7/modules/generated/sklearn.ensemble.IsolationForest.html).
+`predict()` retourne +1 pour un inlier et −1 pour un outlier. Le système affiche 0 et 1. Le score présenté vaut `−decision_function` : un score strictement positif dépasse le seuil d’anomalie. Le percentile situe ce score dans le train ; **ce n’est pas une probabilité d’attaque**. Voir la [documentation officielle de l’algorithme](https://scikit-learn.org/1.7/modules/generated/sklearn.ensemble.IsolationForest.html).
 
 L’évaluation utilise les 25 % d’événements les plus récents. Les règles de référence déclenchent pour ≥3 échecs, ≥6 tentatives ou IP nouvelle avant 6 h. Les résultats réellement calculés sont dans [docs/results.md](docs/results.md) et la page Performance. Les JSON et CSV de calcul se trouvent dans `artifacts/`. Les variations de contamination sont descriptives et ne servent pas à optimiser sur le test.
 

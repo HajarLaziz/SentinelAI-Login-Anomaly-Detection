@@ -20,7 +20,7 @@ with a:
     chart(px.imshow(score['confusion_matrix'],x=['Prédit normal','Prédit suspect'],y=['Réel normal','Réel suspect'],text_auto=True,color_continuous_scale='Blues',title='Matrice de confusion · test'))
 with b:
     comparison = pd.DataFrame(results).T[['precision','recall','f1','false_positive_rate']]
-    chart(px.bar(comparison.reset_index().melt(id_vars='index'),x='variable',y='value',color='index',barmode='group',title='IA et règles — mêmes événements de test'))
+    chart(px.bar(comparison.reset_index().melt(id_vars='index'),x='variable',y='value',color='index',barmode='group',title='Modèle et règles — comparaison sur le test'))
 table(pd.DataFrame(results).T.drop(columns='confusion_matrix').rename_axis('Modèle').reset_index(),'metrics')
 scored = predict(test,bundle)
 chart(px.histogram(scored,x='anomaly_score',color=scored.is_anomaly.map({0:'Normal réel',1:'Suspect réel'}),barmode='overlay',nbins=60,title='Distribution des scores par vérité terrain'))

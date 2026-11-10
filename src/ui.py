@@ -12,11 +12,10 @@ px.defaults.color_discrete_sequence = COLORS
 
 def shell():
     st.markdown('<style>'+ (ROOT/'assets/style.css').read_text(encoding='utf-8')+'</style>',unsafe_allow_html=True)
-    st.sidebar.markdown('''<div class="brand"><span class="brand-mark">c<span>·</span></span><div><strong>clair</strong><small>CONNEXIONS & INTELLIGENCE</small></div></div>
-    <div class="sidebar-note"><span class="status-dot"></span> Espace de démonstration<br><small>Données fictives · exécution locale</small></div>''',unsafe_allow_html=True)
+    st.sidebar.caption('Données simulées · exécution locale')
+
 
 def header(title, subtitle):
-    st.markdown('<div class="workspace-bar"><span>ESPACE D’ANALYSE <b>/</b> AUTHENTIFICATION</span><span class="workspace-pill">Laboratoire pédagogique</span></div>',unsafe_allow_html=True)
     st.title(title)
     st.caption(subtitle)
 
@@ -45,8 +44,8 @@ def resources():
 
 def chart(fig):
     fig.update_layout(template='plotly_white', paper_bgcolor='#ffffff',plot_bgcolor='#ffffff',
-                      colorway=COLORS, font=dict(family='Arial',color='#526678',size=12),
-                      title=dict(font=dict(size=16,color='#203447'),x=.04,y=.94),
+                      colorway=COLORS, font=dict(family='Arial',color='#526678',size=15),
+                      title=dict(font=dict(size=19,color='#203447'),x=.04,y=.94),
                       margin=dict(l=25,r=25,t=65,b=65),height=350,legend_title_text='',
                       legend=dict(orientation='h',y=-.22,x=0,xanchor='left',yanchor='top'))
     fig.update_xaxes(showgrid=False)
@@ -58,7 +57,7 @@ def filters(frame, key):
         cols = st.columns([2,2,1,1,1])
         dates = cols[0].date_input('Période',value=(frame.timestamp.min().date(),frame.timestamp.max().date()),key=key+'date')
         users = cols[1].multiselect('Utilisateurs',sorted(frame.user_id.unique()),key=key+'user')
-        status = cols[2].selectbox('Statut IA',['Tous','Normal','Suspect'],key=key+'status')
+        status = cols[2].selectbox('Statut',['Tous','Normal','Suspect'],key=key+'status')
         novelty = cols[3].selectbox('IP',['Toutes','Nouvelle','Connue'],key=key+'ip')
         device = cols[4].selectbox('Terminal',['Tous']+sorted(frame.device_type.unique()),key=key+'device')
     out = frame.copy()
@@ -76,7 +75,7 @@ def filters(frame, key):
 
 def table(frame,key):
     st.dataframe(frame,use_container_width=True,hide_index=True)
-    st.download_button('Exporter CSV',safe_csv(frame),file_name=f'clair_{key}.csv',mime='text/csv',key=key+'download',icon=':material/download:')
+    st.download_button('Exporter CSV',safe_csv(frame),file_name=f'connexions_{key}.csv',mime='text/csv',key=key+'download',icon=':material/download:')
 
 def activity(frame):
     counts = frame.assign(jour=frame.timestamp.dt.floor('D')).groupby(['jour','status']).size().reset_index(name='Événements')
