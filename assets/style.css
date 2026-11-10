@@ -24,7 +24,7 @@
 .section-heading {display:flex;gap:12px;align-items:center;margin:28px 0 12px;}
 .section-heading h3 {font-size:18px;margin:0;padding:0;}
 .section-heading p {font-size:15px;color:var(--muted);margin:3px 0 0;}
-[data-testid="stPlotlyChart"] {background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;}
+[data-testid="stPlotlyChart"] {background:#fff;border:1px solid #bba68b;border-radius:12px;overflow:hidden;}
 [data-testid="stExpander"] {background:#fff;border-radius:14px;border-color:var(--line);}
 [data-testid="stExpander"] details {border-color:var(--line);border-radius:14px;}
 [data-testid="stDataFrame"] {border:1px solid var(--line);border-radius:14px;overflow:hidden;}
