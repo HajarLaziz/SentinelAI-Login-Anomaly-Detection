@@ -17,7 +17,7 @@ for col,name in zip(cols,['precision','recall','f1','accuracy']):
 st.caption('L’accuracy seule peut masquer les erreurs sur une classe minoritaire. Les étiquettes du simulateur servent uniquement à cette évaluation.')
 a,b = st.columns(2)
 with a:
-    chart(px.imshow(score['confusion_matrix'],x=['Prédit normal','Prédit suspect'],y=['Réel normal','Réel suspect'],text_auto=True,color_continuous_scale='Blues',title='Matrice de confusion · test'))
+    chart(px.imshow(score['confusion_matrix'],x=['Prédit normal','Prédit suspect'],y=['Réel normal','Réel suspect'],text_auto=True,color_continuous_scale=['#faf3e9','#d8b78e','#8b5e3c','#4f3424'],title='Matrice de confusion · test'))
 with b:
     comparison = pd.DataFrame(results).T[['precision','recall','f1','false_positive_rate']]
     chart(px.bar(comparison.reset_index().melt(id_vars='index'),x='variable',y='value',color='index',barmode='group',title='Modèle et règles — comparaison sur le test'))

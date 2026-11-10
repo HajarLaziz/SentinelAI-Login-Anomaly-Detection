@@ -16,7 +16,7 @@ Les connexions inhabituelles peuvent justifier une vérification complémentaire
 - **Simulation** : événements normaux, suspects ou aléatoires ; contexte explicite et réinitialisation de session.
 - **Performance** : matrice de confusion, précision, rappel, F1, accuracy, ROC-AUC, Average Precision, comparaison aux règles et sensibilité au seuil.
 
-L’interface claire associe un fond blanc perlé, du vert d’eau, de la lavande et des accents ambre. La navigation avec icônes, les cartes de synthèse et les graphiques Plotly partagent la même identité visuelle. Aucun indicateur ne représente une mesure de trafic réel.
+L’interface claire associe un fond beige clair, du marron et des accents caramel. La navigation avec icônes, les cartes de synthèse et les graphiques Plotly partagent la même identité visuelle. Aucun indicateur ne représente une mesure de trafic réel.
 
 ## Technologies
 
@@ -26,7 +26,7 @@ Python 3.11 (version testée), Pandas 2.3.3, NumPy 2.2.6, Scikit-learn 1.7.2, St
 
 L’interface ne porte aucun nom de produit. Les textes courants utilisent une taille moyenne de 15–16 px et les intitulés décrivent directement les fonctions.
 
-Refonte du 10 novembre 2026 : thème clair, navigation avec icônes, cartes aux accents pastel, graphique d’activité et anneau de répartition côte à côte, sections numérotées et formulaires sur fond blanc. Les cinq pages utilisent les mêmes composants visuels. La capture conservée dans `docs/screenshots/overview.jpg` est une archive de l’ancienne interface, pas une capture de cette refonte.
+Refonte du 10 novembre 2026 : thème clair, navigation avec icônes, cartes aux accents beige et caramel, graphique d’activité et anneau de répartition côte à côte, sections numérotées et formulaires sur fond blanc. Les cinq pages utilisent les mêmes composants visuels. La capture conservée dans `docs/screenshots/overview.jpg` est une archive de l’ancienne interface, pas une capture de cette refonte.
 
 ## Installation Windows / VS Code
 

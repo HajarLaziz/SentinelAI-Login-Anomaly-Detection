@@ -22,6 +22,6 @@ else:
     top = frame.user_id.value_counts().head(12).rename_axis('Utilisateur').reset_index(name='Événements')
     chart(px.bar(top,x='Utilisateur',y='Événements',title='Utilisateurs les plus actifs'))
     numeric = ['failed_attempts','attempts_10min','new_ip','ip_changed','is_new_device']
-    chart(px.imshow(frame[numeric].corr(),zmin=-1,zmax=1,color_continuous_scale='RdBu_r',title='Corrélations descriptives (sans causalité)'))
+    chart(px.imshow(frame[numeric].corr(),zmin=-1,zmax=1,color_continuous_scale=['#866b57','#faf6f0','#a46330'],title='Corrélations descriptives (sans causalité)'))
     st.caption(f'Valeurs manquantes : {int(frame.isna().sum().sum())} · ID dupliqués : {int(frame.event_id.duplicated().sum())}')
     table(frame,'analytics')

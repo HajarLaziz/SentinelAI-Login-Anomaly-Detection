@@ -7,7 +7,7 @@ from src.utils import ROOT, DATA, MODEL
 from src.predict import load_model, predict
 from src.preprocessing import safe_csv
 
-COLORS = ['#159d90','#e59b48','#8b7bd8','#e58494','#6b9dd0']
+COLORS = ['#8b5e3c','#c58a4b','#ad8b6c','#b86f50','#d8b78e']
 px.defaults.color_discrete_sequence = COLORS
 
 def shell():
@@ -44,12 +44,12 @@ def resources():
 
 def chart(fig):
     fig.update_layout(template='plotly_white', paper_bgcolor='#ffffff',plot_bgcolor='#ffffff',
-                      colorway=COLORS, font=dict(family='Arial',color='#526678',size=15),
-                      title=dict(font=dict(size=19,color='#203447'),x=.04,y=.94),
+                      colorway=COLORS, font=dict(family='Arial',color='#796453',size=15),
+                      title=dict(font=dict(size=19,color='#3e2c23'),x=.04,y=.94),
                       margin=dict(l=25,r=25,t=65,b=65),height=350,legend_title_text='',
                       legend=dict(orientation='h',y=-.22,x=0,xanchor='left',yanchor='top'))
     fig.update_xaxes(showgrid=False)
-    fig.update_yaxes(gridcolor='#edf1f5',zerolinecolor='#edf1f5')
+    fig.update_yaxes(gridcolor='#eee3d6',zerolinecolor='#eee3d6')
     st.plotly_chart(fig,use_container_width=True,theme=None,config={'displaylogo':False})
 
 def filters(frame, key):
