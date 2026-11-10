@@ -2,7 +2,7 @@
 
 ## 0:00–1:00 — Présenter la question
 
-« Comment repérer une connexion inhabituelle sans disposer d’exemples de toutes les attaques ? SentinelAI analyse le contexte d’authentification et propose une vérification supplémentaire. Toutes les données de la démonstration sont fictives. »
+« Comment repérer une connexion inhabituelle sans disposer d’exemples de toutes les attaques ? Clair analyse le contexte d’authentification et propose une vérification supplémentaire. Toutes les données de la démonstration sont fictives. »
 
 ## 1:00–2:00 — Expliquer les données
 

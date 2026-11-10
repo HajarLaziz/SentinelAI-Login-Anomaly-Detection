@@ -2,24 +2,26 @@
 import pandas as pd
 import plotly.express as px
 import streamlit as st
+from html import escape
 from src.utils import ROOT, DATA, MODEL
 from src.predict import load_model, predict
 from src.preprocessing import safe_csv
 
-COLORS = ['#22d3ee','#f59e0b','#818cf8','#fb7185','#34d399']
+COLORS = ['#159d90','#e59b48','#8b7bd8','#e58494','#6b9dd0']
 px.defaults.color_discrete_sequence = COLORS
 
 def shell():
     st.markdown('<style>'+ (ROOT/'assets/style.css').read_text(encoding='utf-8')+'</style>',unsafe_allow_html=True)
-    st.sidebar.markdown('### SENTINEL<span style="color:#22d3ee">AI</span>',unsafe_allow_html=True)
-    st.sidebar.caption('INTELLIGENT LOGIN SECURITY')
-    st.sidebar.divider()
-    st.sidebar.caption('Laboratoire universitaire · données fictives\n\nIsolation Forest / CPU / local')
+    st.sidebar.markdown('''<div class="brand"><span class="brand-mark">c<span>·</span></span><div><strong>clair</strong><small>CONNEXIONS & INTELLIGENCE</small></div></div>
+    <div class="sidebar-note"><span class="status-dot"></span> Espace de démonstration<br><small>Données fictives · exécution locale</small></div>''',unsafe_allow_html=True)
 
 def header(title, subtitle):
-    st.markdown('<div class="eyebrow">SENTINELAI / SECURITY WORKSPACE</div>',unsafe_allow_html=True)
+    st.markdown('<div class="workspace-bar"><span>ESPACE D’ANALYSE <b>/</b> AUTHENTIFICATION</span><span class="workspace-pill">Laboratoire pédagogique</span></div>',unsafe_allow_html=True)
     st.title(title)
     st.caption(subtitle)
+
+def section(number, title, description=''):
+    st.markdown(f'<div class="section-heading"><span>{escape(number)}</span><div><h3>{escape(title)}</h3><p>{escape(description)}</p></div></div>',unsafe_allow_html=True)
 
 @st.cache_resource
 def model_cached(version):
@@ -42,12 +44,14 @@ def resources():
     return data_cached((DATA/'login_logs.csv').stat().st_mtime_ns, version), model_cached(version)
 
 def chart(fig):
-    fig.update_layout(template='plotly_dark', paper_bgcolor='rgba(0,0,0,0)',plot_bgcolor='rgba(0,0,0,0)',
-                      colorway=COLORS, font=dict(family='Arial',color='#b9c7dc'),
-                      margin=dict(l=15,r=15,t=45,b=20),height=340,legend_title_text='')
+    fig.update_layout(template='plotly_white', paper_bgcolor='#ffffff',plot_bgcolor='#ffffff',
+                      colorway=COLORS, font=dict(family='Arial',color='#526678',size=12),
+                      title=dict(font=dict(size=16,color='#203447'),x=.04,y=.94),
+                      margin=dict(l=25,r=25,t=65,b=65),height=350,legend_title_text='',
+                      legend=dict(orientation='h',y=-.22,x=0,xanchor='left',yanchor='top'))
     fig.update_xaxes(showgrid=False)
-    fig.update_yaxes(gridcolor='#233047')
-    st.plotly_chart(fig,use_container_width=True)
+    fig.update_yaxes(gridcolor='#edf1f5',zerolinecolor='#edf1f5')
+    st.plotly_chart(fig,use_container_width=True,theme=None,config={'displaylogo':False})
 
 def filters(frame, key):
     with st.expander('Affiner la vue',expanded=True):
@@ -72,7 +76,7 @@ def filters(frame, key):
 
 def table(frame,key):
     st.dataframe(frame,use_container_width=True,hide_index=True)
-    st.download_button('Exporter CSV',safe_csv(frame),file_name=f'sentinelai_{key}.csv',mime='text/csv',key=key+'download')
+    st.download_button('Exporter CSV',safe_csv(frame),file_name=f'clair_{key}.csv',mime='text/csv',key=key+'download',icon=':material/download:')
 
 def activity(frame):
     counts = frame.assign(jour=frame.timestamp.dt.floor('D')).groupby(['jour','status']).size().reset_index(name='Événements')

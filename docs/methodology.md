@@ -30,7 +30,7 @@ Les caractéristiques excluent event_id, user_id, source_ip, anomaly_type et is_
 
 Chaque arbre choisit une caractéristique et une coupure aléatoires. Un point isolé en peu de coupures est inhabituel. La longueur moyenne de chemin E[h(x)] est normalisée par c(n), longueur attendue dans un arbre de recherche aléatoire : le score original s(x,n)=2^(−E[h(x)]/c(n)) augmente lorsque l’isolement est rapide. Ce score original n’est pas directement le score affiché ici.
 
-Scikit-learn expose `decision_function = score_samples − offset_`. Une valeur négative indique un outlier. `predict` renvoie −1 pour un outlier et +1 pour un inlier. SentinelAI affiche `anomaly_score = −decision_function`, puis 1 = suspect et 0 = normal. Au seuil exact zéro, l’événement est un inlier. Le percentile affiché est le rang du score parmi les scores du train ; il ne représente pas une probabilité d’attaque.
+Scikit-learn expose `decision_function = score_samples − offset_`. Une valeur négative indique un outlier. `predict` renvoie −1 pour un outlier et +1 pour un inlier. Clair affiche `anomaly_score = −decision_function`, puis 1 = suspect et 0 = normal. Au seuil exact zéro, l’événement est un inlier. Le percentile affiché est le rang du score parmi les scores du train ; il ne représente pas une probabilité d’attaque.
 
 ## Entraînement et séparation
 

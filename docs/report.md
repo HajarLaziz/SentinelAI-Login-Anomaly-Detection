@@ -2,7 +2,7 @@
 
 ## 1. Page de garde
 
-**Mini-projet universitaire — SentinelAI**  
+**Mini-projet universitaire — Clair**  
 Établissement : ____________________  
 Filière / module : ____________________  
 Réalisé par : ____________________  
@@ -73,7 +73,7 @@ La simulation simplifie les réseaux, les profils d’usage et les attaques. Une
 
 ## 15. Conclusion
 
-SentinelAI constitue une chaîne pédagogique complète et reproductible : données fictives, apprentissage non supervisé, évaluation indépendante, tests et interface interactive. Son apport principal est la rigueur du contexte temporel et de l’interprétation des scores. Les prolongements concernent des profils individuels, une validation dédiée et une confrontation autorisée à des données plus représentatives.
+Clair constitue une chaîne pédagogique complète et reproductible : données fictives, apprentissage non supervisé, évaluation indépendante, tests et interface interactive. Son apport principal est la rigueur du contexte temporel et de l’interprétation des scores. Les prolongements concernent des profils individuels, une validation dédiée et une confrontation autorisée à des données plus représentatives.
 
 ## 16. Références bibliographiques
 

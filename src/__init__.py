@@ -1,1 +1,1 @@
-"""SentinelAI : prototype pédagogique local."""
+"""Clair : prototype pédagogique local."""
