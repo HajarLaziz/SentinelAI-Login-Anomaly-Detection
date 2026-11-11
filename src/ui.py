@@ -7,8 +7,9 @@ from src.utils import ROOT, DATA, MODEL
 from src.predict import load_model, predict
 from src.preprocessing import safe_csv
 
-COLORS = ['#eee2cf','#d8c3a5','#f5eddf','#e4d2b8','#cfb997']
-CHART_OUTLINE = '#92795b'
+COLORS = ['#ddd2f8','#bce3e5','#c8d9fa','#eccbdd','#d7ccef']
+SERIES_OUTLINES = ['#7952d1','#078695','#3d70d4','#ba4c88','#6850ba']
+CHART_OUTLINE = '#7952d1'
 px.defaults.color_discrete_sequence = COLORS
 LABELS = {
     'event_id':'Événement','user_id':'Utilisateur','timestamp':'Date et heure',
@@ -74,26 +75,27 @@ def chart(fig):
     # Light fills and visible edges shared by every chart on every page.
     for index, trace in enumerate(fig.data):
         fill = COLORS[index % len(COLORS)]
+        outline = SERIES_OUTLINES[index % len(SERIES_OUTLINES)]
         if trace.type in ('bar', 'histogram'):
-            trace.update(marker=dict(color=fill,line=dict(color=CHART_OUTLINE,width=1.2)))
+            trace.update(marker=dict(color=fill,line=dict(color=outline,width=1.2)))
         elif trace.type == 'pie':
             trace.update(marker=dict(colors=COLORS,line=dict(color=CHART_OUTLINE,width=1.3)))
         elif trace.type == 'scatter':
-            trace.update(line=dict(color=['#92795b','#51473c','#b0916c'][index % 3],
+            trace.update(line=dict(color=outline,
                                    width=2,dash=['solid','dash','dot'][index % 3]),
-                         marker=dict(color=fill,size=7,line=dict(color=CHART_OUTLINE,width=1.2)))
+                         marker=dict(color=fill,size=7,line=dict(color=outline,width=1.2)))
             if trace.stackgroup or (trace.fill and trace.fill != 'none'):
                 trace.update(fillcolor=fill)
         elif trace.type == 'heatmap':
             trace.update(xgap=1,ygap=1)
-    fig.update_coloraxes(colorscale=['#faf5eb','#eee2cf','#dfccb0','#cbb390'])
+    fig.update_coloraxes(colorscale=['#faf8ff','#e4daf9','#baa6e4','#7952d1'])
     fig.update_layout(template='plotly_white', paper_bgcolor='#ffffff',plot_bgcolor='#ffffff',
-                      colorway=COLORS, font=dict(family='Segoe UI, Arial',color='#5e5951',size=16),
-                      title=dict(font=dict(size=20,color='#302d29'),x=.04,y=.94),
+                      colorway=COLORS, font=dict(family='Segoe UI, Arial',color='#60698a',size=16),
+                      title=dict(font=dict(size=20,color='#202444'),x=.04,y=.94),
                       margin=dict(l=25,r=25,t=80,b=80),height=390,legend_title_text='',
                       legend=dict(orientation='h',y=-.22,x=0,xanchor='left',yanchor='top'))
     fig.update_xaxes(showgrid=False)
-    fig.update_yaxes(gridcolor='#efede9',zerolinecolor='#efede9')
+    fig.update_yaxes(gridcolor='#efedf6',zerolinecolor='#efedf6')
     # Translate visible labels without changing source data or exported column names.
     for axis in (fig.layout.xaxis, fig.layout.yaxis):
         if axis.title.text in LABELS:

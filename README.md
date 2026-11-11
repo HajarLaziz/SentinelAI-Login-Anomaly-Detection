@@ -16,7 +16,7 @@ Les connexions inhabituelles peuvent justifier une vérification complémentaire
 - **Simulation** : événements normaux, suspects ou aléatoires ; contexte explicite et réinitialisation de session.
 - **Performance** : matrice de confusion, précision, rappel, F1, accuracy, ROC-AUC, Average Precision, comparaison aux règles et sensibilité au seuil.
 
-L’interface épurée associe un fond blanc cassé, des cartes blanches et quelques accents marron et caramel sur les contrôles et les graphiques. La navigation avec icônes, les cartes de synthèse et les graphiques Plotly partagent la même identité visuelle. Aucun indicateur ne représente une mesure de trafic réel.
+L’interface épurée associe une barre latérale bleu nuit, un fond lavande clair, des cartes blanches et des accents violet, turquoise et bleu. La navigation avec icônes, les cartes de synthèse et les graphiques Plotly partagent la même identité visuelle. Aucun indicateur ne représente une mesure de trafic réel.
 
 ## Technologies
 
@@ -24,9 +24,9 @@ Python 3.11 (version testée), Pandas 2.3.3, NumPy 2.2.6, Scikit-learn 1.7.2, St
 
 ## Interface
 
-L’interface ne porte aucun nom de produit. Les textes courants utilisent une taille de 17 px, les titres une police à empattements et les intitulés décrivent directement les fonctions.
+L’interface ne porte aucun nom de produit. Les textes courants utilisent une taille de 17 px, les titres une police sans empattements en gras et les intitulés décrivent directement les fonctions.
 
-Refonte du 11 novembre 2026 : fond crème, navigation latérale compacte, titres Georgia et textes Segoe UI, indicateurs sur deux rangées, filtres repliables, formulaires espacés et tableaux aux lignes plus hautes. Les graphiques conservent leurs remplissages beige clair et leurs contours foncés. Aucun service de polices externe n’est utilisé.
+Refonte du 11 novembre 2026 : fond lavande, navigation latérale bleu nuit, titres et textes Segoe UI, indicateurs sur deux rangées, filtres repliables, formulaires espacés et tableaux aux lignes plus hautes. Les graphiques utilisent des remplissages pastel et des contours violet, turquoise ou bleu. Aucun service de polices externe n’est utilisé.
 
 ![Vue de sécurité — interface actuelle](docs/screenshots/overview-current.jpg)
 
