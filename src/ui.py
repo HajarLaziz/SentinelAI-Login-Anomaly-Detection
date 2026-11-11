@@ -9,7 +9,7 @@ from src.preprocessing import safe_csv
 
 COLORS = ['#ddd2f8','#bce3e5','#c8d9fa','#eccbdd','#d7ccef']
 SERIES_OUTLINES = ['#7952d1','#078695','#3d70d4','#ba4c88','#6850ba']
-CHART_OUTLINE = '#7952d1'
+CHART_ACCENTS = {'violet':0, 'turquoise':1, 'blue':2, 'rose':3, 'indigo':4}
 px.defaults.color_discrete_sequence = COLORS
 LABELS = {
     'event_id':'Événement','user_id':'Utilisateur','timestamp':'Date et heure',
@@ -71,15 +71,19 @@ def resources():
     version = MODEL.stat().st_mtime_ns
     return data_cached((DATA/'login_logs.csv').stat().st_mtime_ns, version), model_cached(version)
 
-def chart(fig):
-    # Light fills and visible edges shared by every chart on every page.
+def chart(fig, accent='violet'):
+    # A stable palette per chart; additional series retain distinct colors.
+    offset = CHART_ACCENTS[accent]
+    fills = COLORS[offset:] + COLORS[:offset]
+    outlines = SERIES_OUTLINES[offset:] + SERIES_OUTLINES[:offset]
+    chart_outline = outlines[0]
     for index, trace in enumerate(fig.data):
-        fill = COLORS[index % len(COLORS)]
-        outline = SERIES_OUTLINES[index % len(SERIES_OUTLINES)]
+        fill = fills[index % len(fills)]
+        outline = outlines[index % len(outlines)]
         if trace.type in ('bar', 'histogram'):
             trace.update(marker=dict(color=fill,line=dict(color=outline,width=1.2)))
         elif trace.type == 'pie':
-            trace.update(marker=dict(colors=COLORS,line=dict(color=CHART_OUTLINE,width=1.3)))
+            trace.update(marker=dict(colors=fills,line=dict(color=chart_outline,width=1.3)))
         elif trace.type == 'scatter':
             trace.update(line=dict(color=outline,
                                    width=2,dash=['solid','dash','dot'][index % 3]),
@@ -88,9 +92,9 @@ def chart(fig):
                 trace.update(fillcolor=fill)
         elif trace.type == 'heatmap':
             trace.update(xgap=1,ygap=1)
-    fig.update_coloraxes(colorscale=['#faf8ff','#e4daf9','#baa6e4','#7952d1'])
+    fig.update_coloraxes(colorscale=['#fafaff',fills[0],chart_outline])
     fig.update_layout(template='plotly_white', paper_bgcolor='#ffffff',plot_bgcolor='#ffffff',
-                      colorway=COLORS, font=dict(family='Segoe UI, Arial',color='#60698a',size=16),
+                      colorway=fills, font=dict(family='Segoe UI, Arial',color='#60698a',size=16),
                       title=dict(font=dict(size=20,color='#202444'),x=.04,y=.94),
                       margin=dict(l=25,r=25,t=80,b=80),height=390,legend_title_text='',
                       legend=dict(orientation='h',y=-.22,x=0,xanchor='left',yanchor='top'))
@@ -104,7 +108,7 @@ def chart(fig):
         if trace.name in LABELS:
             trace.name = LABELS[trace.name]
     if any(trace.type == 'heatmap' for trace in fig.data):
-        fig.update_layout(plot_bgcolor=CHART_OUTLINE)
+        fig.update_layout(plot_bgcolor=chart_outline)
     st.plotly_chart(fig,use_container_width=True,theme=None,config={'displaylogo':False})
 
 def filters(frame, key):
@@ -138,4 +142,4 @@ def table(frame,key):
 
 def activity(frame):
     counts = frame.assign(jour=frame.timestamp.dt.floor('D')).groupby(['jour','status']).size().reset_index(name='Événements')
-    chart(px.area(counts,x='jour',y='Événements',color='status',color_discrete_map={'Normal':COLORS[0],'Suspect':COLORS[1]},title='Activité des authentifications'))
+    chart(px.area(counts,x='jour',y='Événements',color='status',color_discrete_map={'Normal':COLORS[0],'Suspect':COLORS[1]},title='Activité des authentifications'),accent='violet')

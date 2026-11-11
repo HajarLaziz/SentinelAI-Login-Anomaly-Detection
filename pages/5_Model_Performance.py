@@ -17,17 +17,17 @@ for col,name in zip(cols,['precision','recall','f1','accuracy']):
 st.caption('L’accuracy seule peut masquer les erreurs sur une classe minoritaire. Les étiquettes du simulateur servent uniquement à cette évaluation.')
 a,b = st.columns(2)
 with a:
-    chart(px.imshow(score['confusion_matrix'],x=['Prédit normal','Prédit suspect'],y=['Réel normal','Réel suspect'],text_auto=True,color_continuous_scale=['#faf3e9','#d8b78e','#8b5e3c','#4f3424'],title='Matrice de confusion · test'))
+    chart(px.imshow(score['confusion_matrix'],x=['Prédit normal','Prédit suspect'],y=['Réel normal','Réel suspect'],text_auto=True,title='Matrice de confusion · test'),accent='indigo')
 with b:
     comparison = pd.DataFrame(results).T[['precision','recall','f1','false_positive_rate']]
-    chart(px.bar(comparison.reset_index().melt(id_vars='index'),x='variable',y='value',color='index',barmode='group',title='Modèle et règles — comparaison sur le test'))
+    chart(px.bar(comparison.reset_index().melt(id_vars='index'),x='variable',y='value',color='index',barmode='group',title='Modèle et règles — comparaison sur le test'),accent='turquoise')
 table(pd.DataFrame(results).T.drop(columns='confusion_matrix').rename_axis('Modèle').reset_index(),'metrics')
 scored = predict(test,bundle)
-chart(px.histogram(scored,x='anomaly_score',color=scored.is_anomaly.map({0:'Normal réel',1:'Suspect réel'}),barmode='overlay',nbins=60,title='Distribution des scores par vérité terrain'))
+chart(px.histogram(scored,x='anomaly_score',color=scored.is_anomaly.map({0:'Normal réel',1:'Suspect réel'}),barmode='overlay',nbins=60,title='Distribution des scores par vérité terrain'),accent='rose')
 st.caption(f'ROC-AUC : {score.get("roc_auc",float("nan")):.3f} · Average Precision : {score.get("average_precision",float("nan")):.3f}. AP résume la courbe précision-rappel ; ce n’est pas son intégrale trapézoïdale.')
 st.caption(f'PR-AUC (intégrale trapézoïdale) : {score.get("pr_auc",float("nan")):.3f}. La différence avec AP vient de l’interpolation entre les seuils.')
 with st.expander('Sensibilité au seuil et configuration'):
     experiment = pd.DataFrame(sensitivity(pd.read_csv(DATA/'train_logs.csv'),test,bundle))
-    chart(px.line(experiment,x='contamination',y=['precision','recall','f1'],markers=True,title='Exploration descriptive — aucun choix final fondé sur le test'))
+    chart(px.line(experiment,x='contamination',y=['precision','recall','f1'],markers=True,title='Exploration descriptive — aucun choix final fondé sur le test'),accent='blue')
     st.json({k:bundle[k] for k in ['contamination','n_estimators','training_rows','train_end','features']})
 st.warning('Prototype pédagogique : données synthétiques, erreurs possibles, dérive des comportements et démarrage sans historique. Une anomalie ne prouve pas une attaque. Aucune connexion n’est bloquée automatiquement.')

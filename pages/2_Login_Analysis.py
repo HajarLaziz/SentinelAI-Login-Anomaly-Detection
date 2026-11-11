@@ -12,16 +12,18 @@ if frame.empty:
     st.info('Aucun résultat. Élargissez les filtres.')
 else:
     activity(frame)
+    accents = {'login_hour':'turquoise','failed_attempts':'rose','attempts_10min':'blue',
+               'device_type':'violet','new_ip':'indigo','day_of_week':'turquoise'}
     for left,right in [(('login_hour','Heures de connexion'),('failed_attempts','Échecs antérieurs / 10 min')),
                        (('attempts_10min','Tentatives antérieures / 10 min'),('device_type','Types de terminaux')),
                        (('new_ip','Nouveauté IP (1 = nouvelle)'),('day_of_week','Jour de semaine (0 = lundi)'))]:
         a,b = st.columns(2)
         for col,(field,title) in [(a,left),(b,right)]:
             with col:
-                chart(px.histogram(frame,x=field,title=title))
+                chart(px.histogram(frame,x=field,title=title),accent=accents[field])
     top = frame.user_id.value_counts().head(12).rename_axis('Utilisateur').reset_index(name='Événements')
-    chart(px.bar(top,x='Utilisateur',y='Événements',title='Utilisateurs les plus actifs'))
+    chart(px.bar(top,x='Utilisateur',y='Événements',title='Utilisateurs les plus actifs'),accent='blue')
     numeric = ['failed_attempts','attempts_10min','new_ip','ip_changed','is_new_device']
-    chart(px.imshow(frame[numeric].corr(),zmin=-1,zmax=1,color_continuous_scale=['#866b57','#faf6f0','#a46330'],title='Corrélations descriptives (sans causalité)'))
+    chart(px.imshow(frame[numeric].corr(),zmin=-1,zmax=1,title='Corrélations descriptives (sans causalité)'),accent='indigo')
     st.caption(f'Valeurs manquantes : {int(frame.isna().sum().sum())} · ID dupliqués : {int(frame.event_id.duplicated().sum())}')
     table(frame,'analytics')
