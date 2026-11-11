@@ -1,7 +1,7 @@
 import pandas as pd
 import plotly.express as px
 import streamlit as st
-from src.ui import header,resources,chart,table
+from src.ui import header,resources,chart,table,LABELS
 from src.utils import DATA
 from src.evaluate_model import evaluate,sensitivity
 from src.predict import predict
@@ -13,7 +13,7 @@ results = evaluate(test,bundle)
 score = results['Isolation Forest']
 cols = st.columns(4)
 for col,name in zip(cols,['precision','recall','f1','accuracy']):
-    col.metric(name.replace('_',' ').title(),f'{score[name]:.3f}')
+    col.metric(LABELS[name],f'{score[name]:.3f}')
 st.caption('L’accuracy seule peut masquer les erreurs sur une classe minoritaire. Les étiquettes du simulateur servent uniquement à cette évaluation.')
 a,b = st.columns(2)
 with a:

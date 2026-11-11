@@ -1,51 +1,56 @@
-/* Light interface with medium-size typography. */
-:root {--ink:#302d29;--muted:#716c65;--accent:#795034;--line:#e9e6e1;}
-.stApp {background:#fcfbf9;}
-.block-container {max-width:1480px;padding:2.6rem 3rem 4rem;}
-[data-testid="stHeader"] {background:rgba(252,251,249,.94);}
-[data-testid="stSidebar"] {background:#fff;border-right:1px solid var(--line);}
-[data-testid="stSidebarContent"] {display:flex;flex-direction:column;}
-[data-testid="stSidebarUserContent"] {order:-1;}
-[data-testid="stSidebarNav"] {padding-top:12px;padding-bottom:20px;}
-[data-testid="stSidebarNav"] a {margin:5px 12px;padding:11px 14px;border-radius:12px;transition:background .15s ease;}
-[data-testid="stSidebarNav"] a:hover {background:#f7eee3;}
-[data-testid="stSidebarNav"] a[aria-current="page"] {background:#f5eee5;color:#67432c;font-weight:650;box-shadow:inset 3px 0 #8b5e3c;}
- h1 {color:var(--ink);font-size:2.55rem!important;letter-spacing:-1.5px;font-weight:750!important;padding-bottom:.35rem!important;}
- h2,h3 {color:var(--ink);letter-spacing:-.45px;}
-[data-testid="stCaptionContainer"] {color:var(--muted);line-height:1.6;}
-.hero {position:relative;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 22px;margin:18px 0 12px;}
-.hero h2 {color:var(--ink);font-size:19px;font-weight:650;margin:0;padding:0;line-height:1.3;}
-.hero p {color:#7d624b;font-size:15px;margin:10px 0 0;max-width:650px;}
-.hero-foot {display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;}
-.hero-foot span {background:transparent;color:var(--muted);padding:0 18px 0 0;font-size:15px;}
-[data-testid="stMetric"] {background:white;border:1px solid var(--line);border-radius:12px;padding:19px 16px;min-height:112px;}
-[data-testid="stMetricLabel"] {color:#716c65;font-size:15px;}
-[data-testid="stMetricValue"] {color:var(--ink);font-size:1.85rem;letter-spacing:-1px;font-weight:650;}
-.section-heading {display:flex;gap:12px;align-items:center;margin:28px 0 12px;}
-.section-heading h3 {font-size:18px;margin:0;padding:0;}
-.section-heading p {font-size:15px;color:var(--muted);margin:3px 0 0;}
-[data-testid="stPlotlyChart"] {background:#fff;border:1px solid #bba68b;border-radius:12px;overflow:hidden;}
-[data-testid="stExpander"] {background:#fff;border-radius:14px;border-color:var(--line);}
-[data-testid="stExpander"] details {border-color:var(--line);border-radius:14px;}
-[data-testid="stDataFrame"] {border:1px solid var(--line);border-radius:14px;overflow:hidden;}
-[data-testid="stForm"] {background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;}
-[data-baseweb="tab-list"] {gap:22px;border-bottom:1px solid var(--line);margin:18px 0;}
-[data-baseweb="tab"] {font-size:15px;padding:12px 4px;}
-.stButton>button,.stDownloadButton>button,[data-testid="stFormSubmitButton"] button {border-radius:10px;font-size:15px;font-weight:600;min-height:42px;}
-[data-baseweb="input"],[data-baseweb="select"]>div {border-radius:9px;}
-[data-testid="stAlert"] {border-radius:12px;font-size:15px;}
+/* Warm, editorial workspace: local system fonts and accessible native controls. */
+:root {--ink:#302d29;--muted:#68635c;--accent:#795034;--line:#e4dfd6;--paper:#faf9f6;}
+html,body,[data-testid="stApp"] {font-family:"Segoe UI",Arial,sans-serif;color:var(--ink);}
+.stApp {background:var(--paper);}
+.block-container {max-width:1300px;padding:3.5rem 3.2rem 5rem;}
+[data-testid="stHeader"] {background:rgba(250,249,246,.94);}
+[data-testid="stSidebar"] {background:#f0eee8;border-right:1px solid #e5e0d8;}
+[data-testid="stSidebarUserContent"] {padding:24px 16px;}
+.nav-heading {font-family:Georgia,serif;font-size:27px;letter-spacing:-.6px;padding:0 12px 24px;color:#40372f;}
+.nav-group {font-size:13px;font-weight:650;letter-spacing:1.4px;color:#777065;margin:28px 12px 12px;}
+[data-testid="stPageLink"] {margin:5px 0;}
+[data-testid="stPageLink"] a {padding:13px 12px;border-radius:10px;min-height:48px;transition:background .15s ease;}
+[data-testid="stPageLink"] a:hover {background:#e8e3da;}
+[data-testid="stPageLink"] a[aria-current="page"] {background:#e6dfd3;color:#5c402d;}
+[data-testid="stPageLink"] p {white-space:normal;line-height:1.4!important;font-size:16px!important;}
+.nav-footer {border-top:1px solid #ddd7cd;margin:42px 12px 0;padding-top:22px;font-size:15px;color:#635b52;line-height:1.8;}
+.nav-footer>span:last-child {color:#777065;padding-left:16px;}
+.context-dot {display:inline-block;height:6px;width:6px;background:#a4835e;border-radius:50%;margin-right:10px;vertical-align:middle;}
+h1 {font-family:Georgia,"Times New Roman",serif!important;font-weight:400!important;font-size:clamp(2.2rem,3.4vw,3.2rem)!important;letter-spacing:-1.5px!important;line-height:1.16!important;padding-bottom:12px!important;}
+h2,h3 {font-family:"Segoe UI",Arial,sans-serif!important;color:var(--ink);letter-spacing:-.5px;font-weight:600!important;}
+[data-testid="stCaptionContainer"] p {color:var(--muted)!important;font-size:17px!important;line-height:1.65;max-width:920px;}
+.context-strip {display:flex;flex-wrap:wrap;gap:10px 22px;border-bottom:1px solid var(--line);padding:12px 0 24px;margin:6px 0 24px;color:#71675c;font-size:15px;}
+.context-strip span+span {border-left:1px solid #d7cbbb;padding-left:22px;}
+.section-heading {margin:32px 0 16px;}
+.section-heading h3 {font-size:23px;margin:0;padding:0;}
+.section-heading p {font-size:16px;line-height:1.6;color:var(--muted);margin:6px 0 0;}
+[data-testid="stMetric"] {background:#fff;border:1px solid var(--line);border-radius:15px;padding:22px 24px;min-height:124px;box-shadow:0 2px 3px #302d2903;}
+[data-testid="stMetricLabel"] p {color:#686057;font-size:16px!important;font-weight:500;}
+[data-testid="stMetricValue"] {font-family:Georgia,serif;font-size:2.3rem;letter-spacing:-1px;color:#40352b;font-weight:400;}
+[data-testid="stPlotlyChart"] {background:white;border:1px solid #cbbba6;border-radius:16px;overflow:hidden;}
+[data-testid="stExpander"] {background:#fff;border-radius:13px;}
+[data-testid="stExpander"] details {border:1px solid var(--line);border-radius:13px;}
+[data-testid="stExpander"] summary {padding:14px 18px;font-size:17px;}
+[data-testid="stDataFrame"] {border:1px solid var(--line);border-radius:13px;overflow:hidden;}
+[data-testid="stForm"] {background:#fff;border:1px solid #d9d0c3;border-radius:20px;padding:28px;box-shadow:0 7px 24px #352b1f05;}
+[data-testid="stWidgetLabel"] p {font-size:16px!important;font-weight:500;color:#49433c;}
+[data-baseweb="input"],[data-baseweb="select"]>div {background:#fff;border-radius:10px;min-height:46px;border-color:#d7d0c6;}
+[data-baseweb="input"] input,[data-baseweb="select"] {font-size:17px!important;}
+[data-baseweb="tab-list"] {gap:8px;border-bottom:1px solid var(--line);padding-bottom:8px;margin:22px 0 16px;}
+[data-baseweb="tab"] {padding:12px 17px;border-radius:9px;background:transparent;}
+[data-baseweb="tab"][aria-selected="true"] {background:#eee5d9;color:#69482e;}
+[data-baseweb="tab-highlight"] {background:#95714d;height:2px;}
+.stButton>button,.stDownloadButton>button,[data-testid="stFormSubmitButton"] button {border-radius:11px;padding:11px 18px;min-height:48px;font-weight:600;border-color:#d7cbbb;}
+.stButton>button:hover,.stDownloadButton>button:hover {background:#f3ece2;border-color:#a0805e;color:#65462e;}
+button[kind="primary"] {background:#795034;color:#fff;border-color:#795034;}
+button[kind="primary"]:hover {background:#64412b!important;color:#fff!important;}
+[data-testid="stMarkdownContainer"] p,button p,[data-baseweb="tab"] p {font-size:17px!important;line-height:1.55;}
+[data-testid="stAlert"] {border-radius:13px;font-size:16px;}
+[data-testid="stFileUploaderDropzone"] {background:#fff;border:1px dashed #bda587;border-radius:16px;padding:24px;}
+.hero {border:1px dashed #c9b79e;background:#fffdf9;border-radius:18px;padding:38px 30px;margin:22px 0;text-align:center;}
+.hero b {font-family:Georgia,serif;font-size:26px;font-weight:400;}
+.hero p {font-size:17px;color:var(--muted);margin:12px 0 0;}
 [data-testid="stAppDeployButton"] {display:none;}
-@media(max-width:1000px){.block-container{padding:2.5rem 1.5rem;} [data-testid="stMetricValue"]{font-size:1.5rem;}}
-@media(max-width:640px){.block-container{padding:2rem 1rem;}h1{font-size:2rem!important;}.hero{padding:22px;}.hero h2{font-size:21px;}}
-
-/* Shared medium text size for native Streamlit controls and descriptions. */
-[data-testid="stMarkdownContainer"] p,
-[data-testid="stCaptionContainer"] p,
-[data-testid="stWidgetLabel"] p,
-[data-testid="stSidebarNav"] a span,
-[data-baseweb="tab"] p,
-button p {font-size:16px!important;line-height:1.6;}
-[data-baseweb="input"] input,
-[data-baseweb="select"] {font-size:16px!important;}
-[data-testid="stMetricLabel"] p {font-size:15px!important;}
-.section-heading p,.hero p {font-size:16px;line-height:1.6;}
+@media(max-width:1000px){.block-container{padding:3rem 1.4rem;}[data-testid="stMetric"]{padding:18px;}[data-testid="stMetricValue"]{font-size:2rem;}}
+@media(max-width:640px){.block-container{padding:2.5rem 1rem;}h1{font-size:2.3rem!important;letter-spacing:-.8px!important;}.context-strip{display:block;}.context-strip span{display:block;margin:6px 0;}.context-strip span+span{border:0;padding:0;}[data-testid="stForm"]{padding:18px;}[data-baseweb="tab"]{padding:10px;} }
+@media(prefers-reduced-motion:reduce){*{transition:none!important;}}

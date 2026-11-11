@@ -2,7 +2,7 @@ from datetime import timedelta
 from uuid import uuid4
 import pandas as pd
 import streamlit as st
-from src.ui import header,resources,table
+from src.ui import header,resources,table,section
 from src.predict import assess_event,predict,contributing_factors
 from src.preprocessing import read_upload
 
@@ -15,6 +15,7 @@ c.metric('Contamination',f'{bundle["contamination"]:.0%}',help='Proportion utili
 st.caption('Le score est −decision_function : positif = suspect. Le percentile mesure un rang relatif, jamais une probabilité d’attaque.')
 manual,upload,scored = st.tabs(['Évaluer une connexion','Importer un CSV','Historique évalué'])
 with manual:
+    section('','Informations de connexion','Renseignez l’événement à comparer avec l’historique disponible.')
     with st.form('manual_event'):
         a,b = st.columns(2)
         user = a.text_input('Identifiant utilisateur',value='USR-0001',max_chars=128)
@@ -23,7 +24,7 @@ with manual:
         hour = b.time_input('Heure (UTC)',value=pd.Timestamp('14:00').time())
         device = a.selectbox('Type de terminal',['desktop','mobile','tablet','unknown'])
         success = b.checkbox('Authentification réussie',value=True)
-        submit = st.form_submit_button('Analyser la connexion',type='primary')
+        submit = st.form_submit_button('Analyser la connexion',type='primary',icon=':material/arrow_forward:')
     if submit:
         try:
             event = dict(event_id='MAN-'+uuid4().hex[:12],user_id=user.strip(),timestamp=pd.Timestamp.combine(day,hour),source_ip=ip.strip(),device_type=device,login_success=int(success))

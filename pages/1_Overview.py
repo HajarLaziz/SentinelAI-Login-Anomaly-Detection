@@ -1,21 +1,21 @@
 import plotly.express as px
 import streamlit as st
-from src.ui import header, resources, filters, chart, table, activity, section, COLORS
+from src.ui import header, resources, filters, chart, table, activity, section, COLORS, context_strip
 
 header('Vue de sécurité','Historique des authentifications et connexions suspectes. Données simulées.')
 data,bundle = resources()
-st.markdown(f'''<div class="hero"><h2>Résumé des connexions</h2><div class="hero-foot"><span>Isolation Forest · modèle chargé</span><span>{len(data):,} événements fictifs</span><span>Historique au {data.timestamp.max():%d/%m/%Y}</span></div></div>''',unsafe_allow_html=True)
+context_strip(['Isolation Forest',f'{len(data):,} événements',f'Historique au {data.timestamp.max():%d/%m/%Y}'])
 frame = filters(data,'overview')
 if frame.empty:
     st.info('Aucun événement ne correspond aux filtres.')
 else:
     section('01','Indicateurs','Indicateurs calculés sur votre sélection actuelle.')
-    cols = st.columns(6)
     values = [('Événements',len(frame)),('Normaux',int((frame.prediction==0).sum())),('Suspects',int(frame.prediction.sum())),('Taux suspect',f'{frame.prediction.mean():.1%}'),('Utilisateurs',frame.user_id.nunique()),('Échecs',int((frame.login_success==0).sum()))]
-    for col,(label,value) in zip(cols,values):
-        col.metric(label,value)
+    for offset in (0,3):
+        for col,(label,value) in zip(st.columns(3),values[offset:offset+3]):
+            col.metric(label,value)
     section('02','Activité des connexions','Évolution de l’activité et répartition des décisions du modèle.')
-    a,b = st.columns([1.8,1])
+    a,b = st.columns([1.35,1])
     with a:
         activity(frame)
     with b:

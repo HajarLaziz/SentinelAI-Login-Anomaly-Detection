@@ -10,15 +10,42 @@ from src.preprocessing import safe_csv
 COLORS = ['#eee2cf','#d8c3a5','#f5eddf','#e4d2b8','#cfb997']
 CHART_OUTLINE = '#92795b'
 px.defaults.color_discrete_sequence = COLORS
+LABELS = {
+    'event_id':'Événement','user_id':'Utilisateur','timestamp':'Date et heure',
+    'source_ip':'Adresse IP','failed_attempts':'Échecs récents','attempts_10min':'Tentatives / 10 min',
+    'login_hour':'Heure de connexion','day_of_week':'Jour de semaine','device_type':'Type de terminal',
+    'new_ip':'Nouvelle IP','is_new_device':'Nouveau type de terminal','ip_changed':'Changement d’IP',
+    'anomaly_score':'Score d’anomalie','status':'Statut','severity':'Niveau de vérification',
+    'is_anomaly':'Scénario suspect','anomaly_type':'Scénario','prediction':'Décision (0 / 1)',
+    'login_success':'Connexion réussie','relative_percentile':'Percentile historique',
+    'recommendation':'Recommandation','history_events':'Événements antérieurs',
+    'count':'Événements','jour':'Date','variable':'Mesure','value':'Valeur',
+    'precision':'Précision','recall':'Rappel','accuracy':'Exactitude','f1':'Score F1',
+    'false_positive_rate':'Taux de fausses alertes','false_positives':'Fausses alertes',
+    'false_negatives':'Anomalies manquées','contamination':'Contamination',
+}
 
 def shell():
     st.markdown('<style>'+ (ROOT/'assets/style.css').read_text(encoding='utf-8')+'</style>',unsafe_allow_html=True)
-    st.sidebar.caption('Données simulées · exécution locale')
+    with st.sidebar:
+        st.markdown('<div class="nav-heading">Votre espace</div>',unsafe_allow_html=True)
+        st.page_link('pages/1_Overview.py',label='Vue d’ensemble',icon=':material/grid_view:')
+        st.page_link('pages/2_Login_Analysis.py',label='Connexions',icon=':material/query_stats:')
+        st.markdown('<div class="nav-group">ANALYSER</div>',unsafe_allow_html=True)
+        st.page_link('pages/3_Anomaly_Detection.py',label='Détecter une anomalie',icon=':material/fingerprint:')
+        st.page_link('pages/4_Live_Simulation.py',label='Simuler une connexion',icon=':material/science:')
+        st.page_link('pages/5_Model_Performance.py',label='Évaluer le modèle',icon=':material/donut_large:')
+        st.markdown('<div class="nav-footer"><span class="context-dot"></span>Données simulées<br><span>Traitement local</span></div>',unsafe_allow_html=True)
 
 
 def header(title, subtitle):
     st.title(title)
     st.caption(subtitle)
+
+def context_strip(items):
+    """A compact factual summary, with escaped content from the dataset."""
+    content = ''.join(f'<span>{escape(str(item))}</span>' for item in items)
+    st.markdown(f'<div class="context-strip">{content}</div>',unsafe_allow_html=True)
 
 def section(number, title, description=''):
     st.markdown(f'<div class="section-heading"><div><h3>{escape(title)}</h3><p>{escape(description)}</p></div></div>',unsafe_allow_html=True)
@@ -61,24 +88,32 @@ def chart(fig):
             trace.update(xgap=1,ygap=1)
     fig.update_coloraxes(colorscale=['#faf5eb','#eee2cf','#dfccb0','#cbb390'])
     fig.update_layout(template='plotly_white', paper_bgcolor='#ffffff',plot_bgcolor='#ffffff',
-                      colorway=COLORS, font=dict(family='Arial',color='#716c65',size=15),
-                      title=dict(font=dict(size=19,color='#302d29'),x=.04,y=.94),
-                      margin=dict(l=25,r=25,t=65,b=65),height=350,legend_title_text='',
+                      colorway=COLORS, font=dict(family='Segoe UI, Arial',color='#5e5951',size=16),
+                      title=dict(font=dict(size=20,color='#302d29'),x=.04,y=.94),
+                      margin=dict(l=25,r=25,t=80,b=80),height=390,legend_title_text='',
                       legend=dict(orientation='h',y=-.22,x=0,xanchor='left',yanchor='top'))
     fig.update_xaxes(showgrid=False)
     fig.update_yaxes(gridcolor='#efede9',zerolinecolor='#efede9')
+    # Translate visible labels without changing source data or exported column names.
+    for axis in (fig.layout.xaxis, fig.layout.yaxis):
+        if axis.title.text in LABELS:
+            axis.title.text = LABELS[axis.title.text]
+    for trace in fig.data:
+        if trace.name in LABELS:
+            trace.name = LABELS[trace.name]
     if any(trace.type == 'heatmap' for trace in fig.data):
         fig.update_layout(plot_bgcolor=CHART_OUTLINE)
     st.plotly_chart(fig,use_container_width=True,theme=None,config={'displaylogo':False})
 
 def filters(frame, key):
-    with st.expander('Affiner la vue',expanded=True):
-        cols = st.columns([2,2,1,1,1])
-        dates = cols[0].date_input('Période',value=(frame.timestamp.min().date(),frame.timestamp.max().date()),key=key+'date')
-        users = cols[1].multiselect('Utilisateurs',sorted(frame.user_id.unique()),key=key+'user')
-        status = cols[2].selectbox('Statut',['Tous','Normal','Suspect'],key=key+'status')
-        novelty = cols[3].selectbox('IP',['Toutes','Nouvelle','Connue'],key=key+'ip')
-        device = cols[4].selectbox('Terminal',['Tous']+sorted(frame.device_type.unique()),key=key+'device')
+    with st.expander('Filtrer les connexions',expanded=False):
+        period,accounts = st.columns(2)
+        dates = period.date_input('Période',value=(frame.timestamp.min().date(),frame.timestamp.max().date()),key=key+'date')
+        users = accounts.multiselect('Utilisateurs',sorted(frame.user_id.unique()),key=key+'user')
+        status_col,ip_col,device_col = st.columns(3)
+        status = status_col.selectbox('Statut',['Tous','Normal','Suspect'],key=key+'status')
+        novelty = ip_col.selectbox('IP',['Toutes','Nouvelle','Connue'],key=key+'ip')
+        device = device_col.selectbox('Terminal',['Tous']+sorted(frame.device_type.unique()),key=key+'device')
     out = frame.copy()
     if isinstance(dates,(tuple,list)) and len(dates)==2:
         out = out[out.timestamp.dt.date.between(*dates)]
@@ -93,7 +128,10 @@ def filters(frame, key):
     return out
 
 def table(frame,key):
-    st.dataframe(frame,use_container_width=True,hide_index=True)
+    columns = {name:label for name,label in LABELS.items() if name in frame.columns}
+    if 'anomaly_score' in frame:
+        columns['anomaly_score'] = st.column_config.NumberColumn('Score d’anomalie',format='%.4f')
+    st.dataframe(frame,use_container_width=True,hide_index=True,row_height=42,column_config=columns)
     st.download_button('Exporter CSV',safe_csv(frame),file_name=f'connexions_{key}.csv',mime='text/csv',key=key+'download',icon=':material/download:')
 
 def activity(frame):

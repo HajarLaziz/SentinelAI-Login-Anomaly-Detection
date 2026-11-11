@@ -24,9 +24,15 @@ Python 3.11 (version testée), Pandas 2.3.3, NumPy 2.2.6, Scikit-learn 1.7.2, St
 
 ## Interface
 
-L’interface ne porte aucun nom de produit. Les textes courants utilisent une taille moyenne de 15–16 px et les intitulés décrivent directement les fonctions.
+L’interface ne porte aucun nom de produit. Les textes courants utilisent une taille de 17 px, les titres une police à empattements et les intitulés décrivent directement les fonctions.
 
-Refonte du 10 novembre 2026 : thème clair, navigation avec icônes, cartes blanches, graphique d’activité et anneau de répartition côte à côte, sections sobres et formulaires sur fond blanc. Les cinq pages utilisent les mêmes composants visuels. La capture conservée dans `docs/screenshots/overview.jpg` est une archive de l’ancienne interface, pas une capture de cette refonte.
+Refonte du 11 novembre 2026 : fond crème, navigation latérale compacte, titres Georgia et textes Segoe UI, indicateurs sur deux rangées, filtres repliables, formulaires espacés et tableaux aux lignes plus hautes. Les graphiques conservent leurs remplissages beige clair et leurs contours foncés. Aucun service de polices externe n’est utilisé.
+
+![Vue de sécurité — interface actuelle](docs/screenshots/overview-current.jpg)
+
+![Formulaire de détection — interface actuelle](docs/screenshots/detection-current.jpg)
+
+Captures réelles du serveur local. L’ancienne capture `overview.jpg` est conservée comme archive.
 
 ## Installation Windows / VS Code
 

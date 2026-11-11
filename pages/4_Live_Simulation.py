@@ -11,10 +11,10 @@ if 'sim_results' not in st.session_state:
     st.session_state.sim_context = pd.DataFrame(columns=RAW_COLUMNS)
 st.info('Le scénario suspect ajoute neuf échecs synthétiques au contexte des dix minutes précédentes, puis évalue la connexion suivante. Le modèle reste libre de sa décision.')
 cols = st.columns(4)
-normal = cols[0].button('Générer un événement normal',use_container_width=True)
-suspect = cols[1].button('Générer un événement suspect',type='primary',use_container_width=True)
-random = cols[2].button('Générer un événement aléatoire',use_container_width=True)
-reset = cols[3].button('Réinitialiser la session',use_container_width=True)
+normal = cols[0].button('Connexion normale',use_container_width=True)
+suspect = cols[1].button('Connexion suspecte',type='primary',use_container_width=True)
+random = cols[2].button('Scénario aléatoire',use_container_width=True)
+reset = cols[3].button('Réinitialiser',use_container_width=True)
 if reset:
     st.session_state.sim_results = []
     st.session_state.sim_context = pd.DataFrame(columns=RAW_COLUMNS)
