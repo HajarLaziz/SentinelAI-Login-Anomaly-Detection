@@ -1,4 +1,4 @@
-# Analyse des connexions
+# LoginGuard AI
 
 **Détection intelligente des connexions anormales par Intelligence Artificielle**
 
@@ -24,7 +24,7 @@ Python 3.11 (version testée), Pandas 2.3.3, NumPy 2.2.6, Scikit-learn 1.7.2, St
 
 ## Interface
 
-L’interface ne porte aucun nom de produit. Les textes courants utilisent une taille de 17 px, les titres une police sans empattements en gras et les intitulés décrivent directement les fonctions.
+L’interface porte le nom LoginGuard AI. Les textes courants utilisent une taille de 17 px, les titres une police sans empattements en gras et les intitulés décrivent directement les fonctions.
 
 Refonte du 13 novembre 2026 inspirée de l’application fournie : bandeau, cartes et onglets sur un écran. Police Inter si installée, sinon Segoe UI ; aucun service de polices externe. Le modèle chronologique et les fonctions de validation restent ceux du projet.
 

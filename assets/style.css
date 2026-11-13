@@ -38,3 +38,21 @@ button[kind="primary"]{background:#795437;color:white;border-color:#795437;}
 [data-testid="stAlert"]{border-radius:14px;}
 [data-testid="stAppDeployButton"]{display:none;}
 @media(max-width:900px){.block-container{padding:2rem 1rem;}.hero{padding:24px;}[data-baseweb="tab"]{padding:10px;}[data-testid="stMetric"]{padding:16px;}}
+/* Compact proportions from the supplied reference application. */
+.block-container{padding-top:1.6rem;}
+.hero{padding:24px 30px;margin-bottom:18px;}
+.hero h1{font-size:34px!important;margin:0;}
+.hero p{margin:6px 0;font-size:17px;}
+.eyebrow{font-size:12px;margin-bottom:8px;color:#856448;}
+.chip{padding:5px 11px;margin-top:8px;}
+[data-testid="stMetric"]{padding:17px 16px;min-height:110px;position:relative;overflow:hidden;}
+[data-testid="stMetricValue"]{font-size:28px;}
+[data-testid="stMetricLabel"] p{font-size:14px!important;font-weight:650;}
+[data-testid="stColumn"]:nth-child(3n+2) [data-testid="stMetric"]{border-top-color:#8b5b40;}
+[data-testid="stColumn"]:nth-child(3n) [data-testid="stMetric"]{border-top-color:#c69c66;}
+[data-testid="stPlotlyChart"]{box-shadow:0 8px 26px #63472c09;border-color:#e8dccb;}
+.section-heading{margin:22px 0 12px;}
+.section-heading h3{border-left:4px solid #b78a58;padding-left:12px;font-size:21px!important;}
+[data-baseweb="tab-list"]{margin-bottom:14px;}
+[data-testid="stExpander"] details{padding:3px 10px;}
+@media(min-width:641px) and (max-width:1050px){[data-testid="stHorizontalBlock"]{flex-wrap:wrap;}[data-testid="stColumn"]{min-width:210px;}}

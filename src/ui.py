@@ -29,7 +29,7 @@ LABELS = {
 def shell():
     st.markdown('<style>'+ (ROOT/'assets/style.css').read_text(encoding='utf-8')+'</style>',unsafe_allow_html=True)
     with st.sidebar:
-        st.markdown('<div class="nav-heading">Tableau de bord</div>',unsafe_allow_html=True)
+        st.markdown('<div class="nav-heading">LoginGuard AI</div>',unsafe_allow_html=True)
         st.markdown('<div class="nav-group">AUTHENTIFICATIONS</div>',unsafe_allow_html=True)
         st.markdown('Analysez les connexions, explorez les alertes et vérifiez un événement depuis les onglets du dashboard.')
         st.divider()
@@ -83,13 +83,13 @@ def chart(fig, accent='violet'):
         fill = fills[index % len(fills)]
         outline = outlines[index % len(outlines)]
         if trace.type in ('bar', 'histogram'):
-            trace.update(marker=dict(color=fill,line=dict(color=outline,width=1.2)))
+            trace.update(marker=dict(color=fill,line=dict(color=outline,width=.6)))
         elif trace.type == 'pie':
-            trace.update(marker=dict(colors=fills,line=dict(color=chart_outline,width=1.3)))
+            trace.update(marker=dict(colors=[outlines[0],fills[1],*fills[2:]],line=dict(color='#fffdfa',width=4)),sort=False,hovertemplate='%{label}<br><b>%{value:,}</b> événements · %{percent}<extra></extra>')
         elif trace.type == 'scatter':
             trace.update(line=dict(color=outline,
-                                   width=2,dash=['solid','dash','dot'][index % 3]),
-                         marker=dict(color=fill,size=7,line=dict(color=outline,width=1.2)))
+                                   width=2.6,dash=['solid','dash','dot'][index % 3]),
+                         marker=dict(color=outline,size=8,line=dict(color='#fffdfa',width=.7)))
             if trace.stackgroup or (trace.fill and trace.fill != 'none'):
                 trace.update(fillcolor=fill)
         elif trace.type == 'heatmap':
@@ -97,11 +97,12 @@ def chart(fig, accent='violet'):
     fig.update_coloraxes(colorscale=['#faf7f0',fills[0],chart_outline])
     fig.update_layout(template='plotly_white', paper_bgcolor='#ffffff',plot_bgcolor='#ffffff',
                       colorway=fills, font=dict(family='Inter, Segoe UI, Arial',color='#766555',size=16),
-                      title=dict(font=dict(size=20,color='#33251e'),x=.04,y=.94),
-                      margin=dict(l=25,r=25,t=80,b=80),height=390,legend_title_text='',
+                      title=dict(font=dict(size=18,color='#33251e'),x=.06,y=.94),
+                      margin=dict(l=30,r=20,t=65,b=65),height=340,bargap=.22,barcornerradius=5,hoverlabel=dict(bgcolor='#39291f',font=dict(color='#fff8ee',size=15),bordercolor='#39291f'),legend_title_text='',
                       legend=dict(orientation='h',y=-.22,x=0,xanchor='left',yanchor='top'))
     fig.update_xaxes(showgrid=False)
-    fig.update_yaxes(gridcolor='#eee6db',zerolinecolor='#eee6db')
+    fig.update_yaxes(gridcolor='#eee6db',griddash='dot',zeroline=False,tickfont=dict(size=13))
+    fig.update_xaxes(tickfont=dict(size=13),title_font=dict(size=14))
     # Translate visible labels without changing source data or exported column names.
     for axis in (fig.layout.xaxis, fig.layout.yaxis):
         if axis.title.text in LABELS:
@@ -144,4 +145,4 @@ def table(frame,key):
 
 def activity(frame):
     counts = frame.assign(jour=frame.timestamp.dt.floor('D')).groupby(['jour','status']).size().reset_index(name='Événements')
-    chart(px.area(counts,x='jour',y='Événements',color='status',color_discrete_map={'Normal':COLORS[0],'Suspect':COLORS[1]},title='Activité des authentifications'),accent='violet')
+    chart(px.line(counts,x='jour',y='Événements',color='status',markers=True,title='Activité quotidienne'),accent='violet')
