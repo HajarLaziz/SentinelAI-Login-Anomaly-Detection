@@ -1,9 +1,9 @@
 [theme]
 base = "light"
-primaryColor = "#7146d9"
-backgroundColor = "#f6f3ff"
-secondaryBackgroundColor = "#f0edfa"
-textColor = "#202444"
+primaryColor = "#93643f"
+backgroundColor = "#f5efe5"
+secondaryBackgroundColor = "#eee3d3"
+textColor = "#33251e"
 font = "sans serif"
 baseFontSize = 17
 [browser]
@@ -12,3 +12,5 @@ gatherUsageStats = false
 toolbarMode = "minimal"
 [server]
 maxUploadSize = 10
+fileWatcherType = "poll"
+runOnSave = true

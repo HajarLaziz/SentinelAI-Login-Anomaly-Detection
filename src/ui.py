@@ -7,8 +7,8 @@ from src.utils import ROOT, DATA, MODEL
 from src.predict import load_model, predict
 from src.preprocessing import safe_csv
 
-COLORS = ['#ddd2f8','#bce3e5','#c8d9fa','#eccbdd','#d7ccef']
-SERIES_OUTLINES = ['#7952d1','#078695','#3d70d4','#ba4c88','#6850ba']
+COLORS = ['#e8d8c5','#d8b892','#cfbdaa','#e4c5b5','#d4c9b5']
+SERIES_OUTLINES = ['#8b6544','#a36b36','#75604f','#a05d46','#71634b']
 CHART_ACCENTS = {'violet':0, 'turquoise':1, 'blue':2, 'rose':3, 'indigo':4}
 px.defaults.color_discrete_sequence = COLORS
 LABELS = {
@@ -29,18 +29,20 @@ LABELS = {
 def shell():
     st.markdown('<style>'+ (ROOT/'assets/style.css').read_text(encoding='utf-8')+'</style>',unsafe_allow_html=True)
     with st.sidebar:
-        st.markdown('<div class="nav-heading">Votre espace</div>',unsafe_allow_html=True)
-        st.page_link('pages/1_Overview.py',label='Vue d’ensemble',icon=':material/grid_view:')
-        st.page_link('pages/2_Login_Analysis.py',label='Connexions',icon=':material/query_stats:')
-        st.markdown('<div class="nav-group">ANALYSER</div>',unsafe_allow_html=True)
-        st.page_link('pages/3_Anomaly_Detection.py',label='Détecter une anomalie',icon=':material/fingerprint:')
-        st.page_link('pages/4_Live_Simulation.py',label='Simuler une connexion',icon=':material/science:')
-        st.page_link('pages/5_Model_Performance.py',label='Évaluer le modèle',icon=':material/donut_large:')
-        st.markdown('<div class="nav-footer"><span class="context-dot"></span>Données simulées<br><span>Traitement local</span></div>',unsafe_allow_html=True)
+        st.markdown('<div class="nav-heading">Tableau de bord</div>',unsafe_allow_html=True)
+        st.markdown('<div class="nav-group">AUTHENTIFICATIONS</div>',unsafe_allow_html=True)
+        st.markdown('Analysez les connexions, explorez les alertes et vérifiez un événement depuis les onglets du dashboard.')
+        st.divider()
+        st.markdown('**Modèle de détection**')
+        st.markdown('Isolation Forest')
+        st.caption('Historique chronologique · modèle local')
+        st.markdown('**Signaux observés**')
+        st.markdown('Heure de connexion  \nÉchecs récents  \nFréquence des tentatives  \nNouveauté IP et terminal')
+        st.markdown('<div class="nav-footer">Données simulées<br>Traitement local · aucune connexion bloquée</div>',unsafe_allow_html=True)
 
 
 def header(title, subtitle):
-    st.title(title)
+    st.subheader(title) if st.session_state.get('_single_dashboard') else st.title(title)
     st.caption(subtitle)
 
 def context_strip(items):
@@ -92,14 +94,14 @@ def chart(fig, accent='violet'):
                 trace.update(fillcolor=fill)
         elif trace.type == 'heatmap':
             trace.update(xgap=1,ygap=1)
-    fig.update_coloraxes(colorscale=['#fafaff',fills[0],chart_outline])
+    fig.update_coloraxes(colorscale=['#faf7f0',fills[0],chart_outline])
     fig.update_layout(template='plotly_white', paper_bgcolor='#ffffff',plot_bgcolor='#ffffff',
-                      colorway=fills, font=dict(family='Segoe UI, Arial',color='#60698a',size=16),
-                      title=dict(font=dict(size=20,color='#202444'),x=.04,y=.94),
+                      colorway=fills, font=dict(family='Inter, Segoe UI, Arial',color='#766555',size=16),
+                      title=dict(font=dict(size=20,color='#33251e'),x=.04,y=.94),
                       margin=dict(l=25,r=25,t=80,b=80),height=390,legend_title_text='',
                       legend=dict(orientation='h',y=-.22,x=0,xanchor='left',yanchor='top'))
     fig.update_xaxes(showgrid=False)
-    fig.update_yaxes(gridcolor='#efedf6',zerolinecolor='#efedf6')
+    fig.update_yaxes(gridcolor='#eee6db',zerolinecolor='#eee6db')
     # Translate visible labels without changing source data or exported column names.
     for axis in (fig.layout.xaxis, fig.layout.yaxis):
         if axis.title.text in LABELS:

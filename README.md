@@ -2,7 +2,7 @@
 
 **Détection intelligente des connexions anormales par Intelligence Artificielle**
 
-Mini-projet universitaire de cybersécurité : un simulateur de journaux, un modèle Isolation Forest et un tableau de bord Streamlit à cinq pages. Exécution locale sur CPU, sans API payante, base de données ni fournisseur d’authentification.
+Mini-projet universitaire de cybersécurité : un simulateur de journaux, un modèle Isolation Forest et un tableau de bord Streamlit sur un écran, avec quatre onglets. Exécution locale sur CPU, sans API payante, base de données ni fournisseur d’authentification.
 
 ## Contexte et objectif
 
@@ -11,12 +11,12 @@ Les connexions inhabituelles peuvent justifier une vérification complémentaire
 ## Fonctionnalités
 
 - **Vue de sécurité** : indicateurs cohérents avec les filtres, activité, répartition des décisions et événements à vérifier.
-- **Analyse des connexions** : distributions, corrélations, recherche littérale et export CSV.
+- **Explorer les connexions** : filtres, recherche littérale et export CSV.
 - **Détection des anomalies** : évaluation manuelle avec historique causal, score et percentile relatif ; import de CSV fictifs validés.
 - **Simulation** : événements normaux, suspects ou aléatoires ; contexte explicite et réinitialisation de session.
 - **Performance** : matrice de confusion, précision, rappel, F1, accuracy, ROC-AUC, Average Precision, comparaison aux règles et sensibilité au seuil.
 
-L’interface épurée associe une barre latérale bleu nuit, un fond lavande clair, des cartes blanches et des accents violet, turquoise et bleu. La navigation avec icônes, les cartes de synthèse et les graphiques Plotly partagent la même identité visuelle. Aucun indicateur ne représente une mesure de trafic réel.
+L’interface réunit les fonctions dans quatre onglets : vue d’ensemble, exploration, performance et vérification (formulaire, import et simulation). Navigation brun foncé, fond beige, cartes arrondies et graphiques caramel. Aucun indicateur ne représente une mesure de trafic réel.
 
 ## Technologies
 
@@ -26,13 +26,11 @@ Python 3.11 (version testée), Pandas 2.3.3, NumPy 2.2.6, Scikit-learn 1.7.2, St
 
 L’interface ne porte aucun nom de produit. Les textes courants utilisent une taille de 17 px, les titres une police sans empattements en gras et les intitulés décrivent directement les fonctions.
 
-Refonte du 11 novembre 2026 : fond lavande, navigation latérale bleu nuit, titres et textes Segoe UI, indicateurs sur deux rangées, filtres repliables, formulaires espacés et tableaux aux lignes plus hautes. Les graphiques utilisent des remplissages pastel et des contours violet, turquoise ou bleu. Aucun service de polices externe n’est utilisé.
+Refonte du 13 novembre 2026 inspirée de l’application fournie : bandeau, cartes et onglets sur un écran. Police Inter si installée, sinon Segoe UI ; aucun service de polices externe. Le modèle chronologique et les fonctions de validation restent ceux du projet.
 
-![Vue de sécurité — interface actuelle](docs/screenshots/overview-current.jpg)
+![Dashboard beige et brun](docs/screenshots/dashboard-beige.jpg)
 
-![Formulaire de détection — interface actuelle](docs/screenshots/detection-current.jpg)
-
-Captures réelles du serveur local. L’ancienne capture `overview.jpg` est conservée comme archive.
+Les anciennes captures sont conservées comme archives.
 
 ## Installation Windows / VS Code
 

@@ -9,7 +9,7 @@ from src.utils import ROOT
 def test_pages(page):
     app=AppTest.from_file(str(ROOT/page),default_timeout=90).run()
     assert not app.exception, [e.message for e in app.exception]
-    assert app.title
+    assert app.title or app.subheader
 
 def test_filter_empty_and_search():
     app=AppTest.from_file(str(ROOT/'pages/2_Login_Analysis.py'),default_timeout=90).run()
@@ -40,3 +40,16 @@ def test_overview_filter_consistency():
     assert not app.exception
     assert app.metric[1].value=='0'
     assert app.metric[0].value==app.metric[2].value
+
+
+def test_single_dashboard_interactions():
+    app = AppTest.from_file(str(ROOT/'app.py'), default_timeout=90).run()
+    assert not app.exception
+    assert [tab.label for tab in app.tabs][:4] == ['Vue d’ensemble', 'Explorer les connexions', 'Performance du modèle', 'Vérifier une connexion']
+    next(button for button in app.button if button.label == 'Analyser la connexion').click().run()
+    assert not app.exception
+    next(button for button in app.button if button.label == 'Connexion suspecte').click().run()
+    assert not app.exception
+    assert len(app.session_state['sim_results']) == 1
+    next(button for button in app.button if button.label == 'Réinitialiser').click().run()
+    assert not app.exception and not app.session_state['sim_results']
