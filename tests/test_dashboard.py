@@ -53,3 +53,12 @@ def test_single_dashboard_interactions():
     assert len(app.session_state['sim_results']) == 1
     next(button for button in app.button if button.label == 'Réinitialiser').click().run()
     assert not app.exception and not app.session_state['sim_results']
+
+def test_sidebar_filters_update_overview():
+    app = AppTest.from_file(str(ROOT/'app.py'), default_timeout=90).run()
+    app.slider(key='sidebar_limit').set_value(500).run()
+    assert not app.exception
+    assert app.metric[0].value == '500'
+    app.slider(key='sidebar_percentile').set_value(100).run()
+    assert not app.exception
+    assert app.info

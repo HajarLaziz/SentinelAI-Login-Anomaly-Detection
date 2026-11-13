@@ -29,16 +29,16 @@ LABELS = {
 def shell():
     st.markdown('<style>'+ (ROOT/'assets/style.css').read_text(encoding='utf-8')+'</style>',unsafe_allow_html=True)
     with st.sidebar:
-        st.markdown('<div class="nav-heading">LoginGuard AI</div>',unsafe_allow_html=True)
-        st.markdown('<div class="nav-group">AUTHENTIFICATIONS</div>',unsafe_allow_html=True)
-        st.markdown('Analysez les connexions, explorez les alertes et vérifiez un événement depuis les onglets du dashboard.')
-        st.divider()
-        st.markdown('**Modèle de détection**')
-        st.markdown('Isolation Forest')
-        st.caption('Historique chronologique · modèle local')
-        st.markdown('**Signaux observés**')
-        st.markdown('Heure de connexion  \nÉchecs récents  \nFréquence des tentatives  \nNouveauté IP et terminal')
-        st.markdown('<div class="nav-footer">Données simulées<br>Traitement local · aucune connexion bloquée</div>',unsafe_allow_html=True)
+        st.markdown('<div class="sidebar-brand"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 4 6v6c0 5 8 9 8 9s8-4 8-9V6l-8-3Z" stroke="currentColor" stroke-width="1.7"/></svg><strong>LoginGuard AI</strong></div><div class="sidebar-subtitle">Détection des connexions<br>inhabituelles</div>',unsafe_allow_html=True)
+        st.markdown('<div class="sidebar-label">MODÈLE DE DÉTECTION</div>',unsafe_allow_html=True)
+        st.selectbox('Modèle de détection',['Isolation Forest'],disabled=True,label_visibility='collapsed',help='Modèle local entraîné sur l’historique chronologique.')
+        st.markdown('<div class="sidebar-label">HISTORIQUE AFFICHÉ</div>',unsafe_allow_html=True)
+        data,_ = resources()
+        st.slider('Nombre de connexions',min_value=100,max_value=len(data),value=len(data),step=100,key='sidebar_limit',help='Événements les plus récents dans la vue d’ensemble et l’explorateur.')
+        st.slider('Heures de connexion',0,23,(0,23),key='sidebar_hours')
+        st.markdown('<div class="sidebar-label">FILTRE DES ALERTES</div>',unsafe_allow_html=True)
+        st.slider('Percentile minimum',0,100,0,key='sidebar_percentile',help='Filtre d’affichage du rang historique des scores. Ne modifie ni le modèle ni son seuil de décision ; ce n’est pas une probabilité.')
+        st.markdown('<div class="sidebar-note">Filtres : vue d’ensemble et explorateur.<br>Évaluation et simulation inchangées.</div><div class="sidebar-status"><span></span>Modèle local · données simulées</div>',unsafe_allow_html=True)
 
 
 def header(title, subtitle):
@@ -124,6 +124,11 @@ def filters(frame, key):
         novelty = ip_col.selectbox('IP',['Toutes','Nouvelle','Connue'],key=key+'ip')
         device = device_col.selectbox('Terminal',['Tous']+sorted(frame.device_type.unique()),key=key+'device')
     out = frame.copy()
+    if st.session_state.get('_single_dashboard'):
+        out = out.sort_values('timestamp').tail(st.session_state.get('sidebar_limit',len(out)))
+        hours = st.session_state.get('sidebar_hours',(0,23))
+        out = out[out.login_hour.between(*hours)]
+        out = out[out.relative_percentile >= st.session_state.get('sidebar_percentile',0)]
     if isinstance(dates,(tuple,list)) and len(dates)==2:
         out = out[out.timestamp.dt.date.between(*dates)]
     if users:

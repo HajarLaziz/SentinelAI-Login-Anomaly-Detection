@@ -56,3 +56,21 @@ button[kind="primary"]{background:#795437;color:white;border-color:#795437;}
 [data-baseweb="tab-list"]{margin-bottom:14px;}
 [data-testid="stExpander"] details{padding:3px 10px;}
 @media(min-width:641px) and (max-width:1050px){[data-testid="stHorizontalBlock"]{flex-wrap:wrap;}[data-testid="stColumn"]{min-width:210px;}}
+/* Compact control rail, matching the supplied sidebar layout. */
+[data-testid="stSidebar"]{width:260px!important;min-width:260px!important;background:#2e211b;border-right:1px solid #584233;}
+[data-testid="stSidebarUserContent"]{padding:18px 18px 24px;}
+.sidebar-brand{display:flex;align-items:center;gap:7px;color:#fff4e6;font-size:20px;letter-spacing:-.5px;white-space:nowrap;}
+.sidebar-brand svg{width:21px;height:21px;color:#d7ae79;flex:none;}
+.sidebar-subtitle{font-size:14px;color:#c3ac97;line-height:1.35;margin:4px 0 4px;}
+.sidebar-label{font-size:12px;letter-spacing:.13em;font-weight:600;color:#c6ad95;margin:22px 0 7px;}
+[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p{font-size:14px!important;font-weight:400;color:#d8c4b0!important;}
+[data-testid="stSidebar"] [data-baseweb="select"]>div{background:#3c2c23;border:1px solid #624b38;border-radius:10px;min-height:38px;color:#fff2e2;}
+[data-testid="stSidebar"] [data-baseweb="select"] [aria-disabled="true"]{color:#fff2e2;-webkit-text-fill-color:#fff2e2;opacity:1;}
+[data-testid="stSidebar"] [data-testid="stSlider"]{padding-bottom:0;}
+[data-testid="stSidebar"] [role="slider"]{background:#c99c67;box-shadow:none;}
+[data-testid="stSidebar"] [data-testid="stTickBar"]{color:#c3ac97;font-size:12px;}
+.sidebar-note{font-size:12px;color:#c3ac97;line-height:1.6;margin-top:12px;}
+.sidebar-status{display:flex;align-items:center;gap:7px;font-size:12px;color:#d8c4b0;border-top:1px solid #513c2f;padding-top:18px;margin-top:24px;}
+.sidebar-status span{width:6px;height:6px;border-radius:50%;background:#d1ad7d;}
+[data-testid="stSidebarHeader"]{height:2rem;min-height:2rem;padding:0 12px;}
+[data-testid="stSidebar"] [data-testid="stVerticalBlock"]{gap:.65rem;}
