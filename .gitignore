@@ -7,3 +7,4 @@ __pycache__/
 data/*.csv
 artifacts/
 .ipynb_checkpoints/
+tmp/

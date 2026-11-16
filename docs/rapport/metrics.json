@@ -1,0 +1,43 @@
+{
+  "Isolation Forest": {
+    "precision": 0.6570048309178744,
+    "recall": 0.16831683168316833,
+    "f1": 0.26798029556650244,
+    "accuracy": 0.7523333333333333,
+    "false_positives": 71,
+    "false_negatives": 672,
+    "false_positive_rate": 0.03239051094890511,
+    "confusion_matrix": [
+      [
+        2121,
+        71
+      ],
+      [
+        672,
+        136
+      ]
+    ],
+    "roc_auc": 0.8713994859796199,
+    "average_precision": 0.6603753350128747,
+    "pr_auc": 0.6609155851638682
+  },
+  "Règles": {
+    "precision": 0.9978070175438597,
+    "recall": 0.5631188118811881,
+    "f1": 0.7199367088607594,
+    "accuracy": 0.882,
+    "false_positives": 1,
+    "false_negatives": 353,
+    "false_positive_rate": 0.0004562043795620438,
+    "confusion_matrix": [
+      [
+        2191,
+        1
+      ],
+      [
+        353,
+        455
+      ]
+    ]
+  }
+}

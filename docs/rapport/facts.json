@@ -1,0 +1,144 @@
+{
+  "rows": 12000,
+  "columns": [
+    "event_id",
+    "user_id",
+    "timestamp",
+    "source_ip",
+    "device_type",
+    "login_success",
+    "anomaly_type",
+    "is_anomaly",
+    "ip_changed",
+    "new_ip",
+    "failed_attempts",
+    "attempts_10min",
+    "is_new_device",
+    "login_hour",
+    "day_of_week"
+  ],
+  "users": 400,
+  "start": "2026-01-01 01:49:47.039096982",
+  "end": "2026-03-01 19:50:51.476960244",
+  "train_end": "2026-02-15 10:12:06.931779626",
+  "test_start": "2026-02-15 10:12:31.931779626",
+  "scenarios": {
+    "normal": 8915,
+    "brute_force": 983,
+    "combined": 898,
+    "high_frequency": 886,
+    "new_device": 111,
+    "unseen_ip": 107,
+    "night_login": 100
+  },
+  "normal": 8915,
+  "suspect": 3085,
+  "train_anomalies": 2277,
+  "test_anomalies": 808,
+  "missing": 0,
+  "duplicates": 0,
+  "failed": 2242,
+  "predicted_suspect": 913,
+  "sensitivity": [
+    {
+      "contamination": 0.03,
+      "precision": 0.7733333333333333,
+      "recall": 0.07178217821782178,
+      "f1": 0.13137032842582105,
+      "accuracy": 0.7443333333333333,
+      "false_positives": 17,
+      "false_negatives": 750,
+      "false_positive_rate": 0.007755474452554745,
+      "confusion_matrix": [
+        [
+          2175,
+          17
+        ],
+        [
+          750,
+          58
+        ]
+      ]
+    },
+    {
+      "contamination": 0.05,
+      "precision": 0.7142857142857143,
+      "recall": 0.11757425742574257,
+      "f1": 0.20191285866099895,
+      "accuracy": 0.7496666666666667,
+      "false_positives": 38,
+      "false_negatives": 713,
+      "false_positive_rate": 0.017335766423357664,
+      "confusion_matrix": [
+        [
+          2154,
+          38
+        ],
+        [
+          713,
+          95
+        ]
+      ]
+    },
+    {
+      "contamination": 0.08,
+      "precision": 0.6570048309178744,
+      "recall": 0.16831683168316833,
+      "f1": 0.26798029556650244,
+      "accuracy": 0.7523333333333333,
+      "false_positives": 71,
+      "false_negatives": 672,
+      "false_positive_rate": 0.03239051094890511,
+      "confusion_matrix": [
+        [
+          2121,
+          71
+        ],
+        [
+          672,
+          136
+        ]
+      ]
+    },
+    {
+      "contamination": 0.12,
+      "precision": 0.6433566433566433,
+      "recall": 0.22772277227722773,
+      "f1": 0.33638025594149906,
+      "accuracy": 0.758,
+      "false_positives": 102,
+      "false_negatives": 624,
+      "false_positive_rate": 0.046532846715328466,
+      "confusion_matrix": [
+        [
+          2090,
+          102
+        ],
+        [
+          624,
+          184
+        ]
+      ]
+    },
+    {
+      "contamination": 0.18,
+      "precision": 0.7175,
+      "recall": 0.3551980198019802,
+      "f1": 0.47516556291390727,
+      "accuracy": 0.7886666666666666,
+      "false_positives": 113,
+      "false_negatives": 521,
+      "false_positive_rate": 0.05155109489051095,
+      "confusion_matrix": [
+        [
+          2079,
+          113
+        ],
+        [
+          521,
+          287
+        ]
+      ]
+    }
+  ]
+}

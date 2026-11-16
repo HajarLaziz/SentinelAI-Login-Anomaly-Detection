@@ -139,3 +139,7 @@ Améliorations possibles : validation chronologique supplémentaire, profils par
 Dépôt public : [HajarLaziz/SentinelAI-Login-Anomaly-Detection](https://github.com/HajarLaziz/SentinelAI-Login-Anomaly-Detection). Les jalons de développement sont conservés dans des commits distincts. La licence reste à choisir explicitement ; aucune autorisation open source n’est présumée avant ce choix.
 
 Voir le [guide de publication et de vérification](docs/github.md) pour les prochaines contributions.
+
+## Rapport académique complet
+
+Le [rapport PDF FSSM 2026-2027](output/pdf/Rapport_LoginGuard_AI_FSSM_2026_2027.pdf) présente LoginGuard AI en 30 pages : architecture, pipeline, données, évaluation, captures et guide d’exécution. Les [sources du rapport](docs/rapport/README.md) permettent de le reconstruire.
