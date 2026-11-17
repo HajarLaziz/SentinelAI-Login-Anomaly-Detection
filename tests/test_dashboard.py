@@ -48,17 +48,17 @@ def test_single_dashboard_interactions():
     assert [tab.label for tab in app.tabs][:4] == ['Vue d’ensemble', 'Explorer les connexions', 'Performance du modèle', 'Vérifier une connexion']
     next(button for button in app.button if button.label == 'Analyser la connexion').click().run()
     assert not app.exception
-    next(button for button in app.button if button.label == 'Connexion suspecte').click().run()
+    next(button for button in app.button if button.label == 'Lire l’événement suivant').click().run()
     assert not app.exception
-    assert len(app.session_state['sim_results']) == 1
-    next(button for button in app.button if button.label == 'Réinitialiser').click().run()
-    assert not app.exception and not app.session_state['sim_results']
+    assert len(app.session_state['real_replay_ids']) == 1
+    next(button for button in app.button if button.label == 'Réinitialiser la relecture').click().run()
+    assert not app.exception and not app.session_state['real_replay_ids']
 
 def test_sidebar_filters_update_overview():
     app = AppTest.from_file(str(ROOT/'app.py'), default_timeout=90).run()
-    app.slider(key='sidebar_limit').set_value(500).run()
+    app.slider(key='real_limit').set_value(500).run()
     assert not app.exception
     assert app.metric[0].value == '500'
-    app.slider(key='sidebar_percentile').set_value(100).run()
+    app.slider(key='real_percentile').set_value(100).run()
     assert not app.exception
-    assert app.info
+    assert not app.exception

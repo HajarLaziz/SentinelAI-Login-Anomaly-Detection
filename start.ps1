@@ -7,12 +7,12 @@ if (-not (Test-Path '.venv/Scripts/python.exe')) {
 $python = Join-Path $PSScriptRoot '.venv/Scripts/python.exe'
 & $python -m pip install -r requirements.txt
 if ($LASTEXITCODE -ne 0) { throw 'Installation impossible.' }
-& $python -m src.generate_data
-if ($LASTEXITCODE -ne 0) { throw 'Génération impossible.' }
-if (-not (Test-Path 'models/isolation_forest.joblib')) {
-    & $python -m src.train_model
-    if ($LASTEXITCODE -ne 0) { throw 'Entraînement impossible.' }
+if (-not (Test-Path 'data/lanl/auth_selected.csv')) {
+    & $python -m src.import_lanl
+    if ($LASTEXITCODE -ne 0) { throw 'Import LANL impossible.' }
 }
-& $python -m src.evaluate_model
-if ($LASTEXITCODE -ne 0) { throw 'Évaluation impossible.' }
+if (-not (Test-Path 'models/lanl_isolation_forest.joblib') -or -not (Test-Path 'data/lanl/login_logs.csv')) {
+    & $python -m src.lanl
+    if ($LASTEXITCODE -ne 0) { throw 'Preparation impossible.' }
+}
 & $python -m streamlit run app.py --server.address 127.0.0.1
