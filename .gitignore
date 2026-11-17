@@ -8,3 +8,4 @@ data/*.csv
 artifacts/
 .ipynb_checkpoints/
 tmp/
+data/lanl/
