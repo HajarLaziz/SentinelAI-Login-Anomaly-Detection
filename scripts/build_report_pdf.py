@@ -38,10 +38,10 @@ class Report(BaseDocTemplate):
             if title!='Table des matières': self.notify('TOCEntry',(0,title,self.page,key))
 def footer(c,d):
     if d.page==1:return
-    c.saveState();c.setStrokeColor(LINE);c.setLineWidth(.5);c.line(56,H-43,W-56,H-43)
-    c.setFont('Serif',9);c.setFillColor(MUTED);c.drawString(56,H-34,'LoginGuard AI | Détection des connexions anormales')
-    c.drawRightString(W-56,H-34,'FSSM · Master S3')
-    c.line(56,43,W-56,43);c.drawString(56,30,'Hajar Laziz · Jihane Hamouchi');c.drawRightString(W-56,30,str(d.page));c.restoreState()
+    c.saveState()
+    c.setFont('Serif',9);c.setFillColor(MUTED)
+    c.drawCentredString(W/2,30,str(d.page))
+    c.restoreState()
 def p(t):S.append(Paragraph(t,styles['body']))
 def h(t):S.append(Paragraph(t,styles['h2']))
 def page(t):
@@ -380,9 +380,6 @@ refs=[
 for n,t in refs:p(f'<b>[{n}]</b> {t}')
 for label,url in [('Isolation Forest','https://scikit-learn.org/1.7/modules/generated/sklearn.ensemble.IsolationForest.html'),('Average Precision','https://scikit-learn.org/1.7/modules/generated/sklearn.metrics.average_precision_score.html'),('AppTest','https://docs.streamlit.io/develop/api-reference/app-testing/st.testing.v1.apptest'),('Dépôt du projet','https://github.com/HajarLaziz/SentinelAI-Login-Anomaly-Detection')]:
     S.append(Paragraph(f'<b>{label}</b><br/><link href="{url}" color="#795437">{url}</link>',styles['small']));S.append(Spacer(1,9))
-p('Documentation en ligne consultée le 16 novembre 2026. Les versions techniques exécutées sont celles du fichier requirements.txt ; la documentation Streamlit en ligne peut présenter une version plus récente.')
-h('Provenance des illustrations et résultats')
-p('Le logo institutionnel UCA-FSSM est celui fourni pour la couverture. Les huit captures d’écran ont été réalisées sur le serveur local du projet. Les schémas d’architecture, de fenêtre temporelle et de pipeline synthétisent le code. Les métriques proviennent de l’exécution de src.evaluate_model ; les distributions proviennent des CSV générés avec la graine 42.')
 # The source remains editable; report generation is independent of the application.
 doc=Report(str(OUT/'Rapport_LoginGuard_AI_FSSM_2026_2027.pdf'),pagesize=A4,leftMargin=56,rightMargin=56,topMargin=62,bottomMargin=58,title='LoginGuard AI - Détection intelligente des connexions anormales',author='Hajar Laziz ; Jihane Hamouchi',subject='Master S3 - FSSM - Sécurité des systèmes d’information et l’IA',pageCompression=1)
 doc.addPageTemplates(PageTemplate(id='academic',frames=[Frame(56,58,CW,H-120,leftPadding=0,rightPadding=0,topPadding=0,bottomPadding=0)],onPage=footer))
