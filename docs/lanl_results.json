@@ -1,0 +1,91 @@
+{
+  "manifest": {
+    "dataset": "LANL Comprehensive, Multi-Source Cyber-Security Events",
+    "doi": "10.17021/1179829",
+    "provenance": "Real enterprise authentication logs, de-identified by LANL",
+    "official_page": "https://csr.lanl.gov/data/cyber1/",
+    "mirror": "https://lanl.ma.ic.ac.uk/data/cyber1/",
+    "citation": "Alexander D. Kent, Comprehensive, Multi-Source Cybersecurity Events, 2015.",
+    "cohort": "source user U1..U1000, all domains; LogOn; known source/destination hosts",
+    "start_seconds": 1,
+    "end_seconds_exclusive": 259200,
+    "train_end_exclusive": 172800,
+    "scanned_lines": 48889072,
+    "selected_rows": 2584536,
+    "compressed_prefix_bytes": 341835776,
+    "compressed_prefix_sha256": "ab391185a423f6dc5b9b888820b16e3eb4bb8db8f5a65c2e4a842324da970929",
+    "selected_sha256": "83059644e7824dcb82e7f1b701129aae63a79e20d1aa29cafb72b686fdf9fae9",
+    "redteam_sha256": "e8ffba5383035389b0de67ccbe8ec61ba10d3cb4467e754cb9f5188b3d7a4aff",
+    "label_policy": "Exact (time, source user, source host, destination host) match. Zero means unannotated, not proven benign.",
+    "limitations": [
+      "Absolute calendar and timezone undisclosed; relative hour only.",
+      "No IP addresses or physical device types in authentication source.",
+      "Fixed early-ID cohort and first three days are not representative of all LANL.",
+      "Failures included by publisher only for users with a success somewhere in full dataset."
+    ],
+    "scope": "NTLM / Network / LogOn, source account U1..U1000, first 3 relative days",
+    "rows": 243247,
+    "users": 459,
+    "train_rows": 166956,
+    "test_rows": 76291,
+    "train_redteam": 9,
+    "test_redteam": 11,
+    "redteam": 20,
+    "failures": 2799,
+    "features": [
+      "hour_sin",
+      "hour_cos",
+      "failed_attempts",
+      "attempts_10min",
+      "source_changed",
+      "new_source",
+      "new_destination"
+    ],
+    "first_second": 1,
+    "last_second": 259197,
+    "prepared_sha256": "42c8cd553eca55b68da354868b50f8981758b2b2c36bfbe5f1e3bdc7dad510f9"
+  },
+  "metrics": {
+    "Isolation Forest": {
+      "precision": 0.005025125628140704,
+      "recall": 0.09090909090909091,
+      "f1": 0.009523809523809525,
+      "accuracy": 0.9972735971477632,
+      "false_positives": 198,
+      "false_negatives": 10,
+      "false_positive_rate": 0.002595700052438385,
+      "confusion_matrix": [
+        [
+          76082,
+          198
+        ],
+        [
+          10,
+          1
+        ]
+      ],
+      "roc_auc": 0.6700171616532392,
+      "average_precision": 0.003037372604486831,
+      "pr_auc": 0.0021609628273604638
+    },
+    "Règles": {
+      "precision": 8.442618337367029e-05,
+      "recall": 0.5454545454545454,
+      "f1": 0.00016882623559701177,
+      "accuracy": 0.06847465625040962,
+      "false_positives": 71062,
+      "false_negatives": 5,
+      "false_positive_rate": 0.9315941269008915,
+      "confusion_matrix": [
+        [
+          5218,
+          71062
+        ],
+        [
+          5,
+          6
+        ]
+      ]
+    }
+  }
+}

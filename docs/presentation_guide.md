@@ -1,3 +1,5 @@
+> ARCHIVE : ce document concerne la version synthétique antérieure. Pour le dataset réel LANL et ses résultats, consulter README.md et docs/lanl_results.json.
+
 # Soutenance : parcours de 9 minutes
 
 ## 0:00–1:00 — Présenter la question

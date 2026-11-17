@@ -1,145 +1,76 @@
-# LoginGuard AI
+# LoginGuard AI — authentifications réelles LANL
 
-**Détection intelligente des connexions anormales par Intelligence Artificielle**
+Tableau de bord local de détection des connexions inhabituelles avec Isolation Forest, Python, Pandas, Scikit-learn, Streamlit et Plotly.
 
-Mini-projet universitaire de cybersécurité : un simulateur de journaux, un modèle Isolation Forest et un tableau de bord Streamlit sur un écran, avec quatre onglets. Exécution locale sur CPU, sans API payante, base de données ni fournisseur d’authentification.
+## Dataset réellement utilisé
 
-## Contexte et objectif
+[Comprehensive, Multi-Source Cyber-Security Events, LANL](https://csr.lanl.gov/data/cyber1/), Alexander D. Kent (2015), DOI **10.17021/1179829**. Journaux d’entreprise collectés et anonymisés, téléchargés depuis le miroir académique Imperial College. Aucun événement synthétique n’alimente le tableau de bord.
 
-Les connexions inhabituelles peuvent justifier une vérification complémentaire : échecs répétés, activité nocturne, fréquence élevée, changement d’IP ou type de terminal inédit. Le système apprend sans étiquettes, puis compare ses alertes aux scénarios connus du simulateur. Une alerte n’est pas une preuve d’attaque.
+Le sous-ensemble comporte **243 247 événements, 459 comptes et 2 799 échecs**, sur les trois premiers jours relatifs. Sélection fixée sans consulter les annotations : comptes sources U1 à U1000, machines connues, NTLM / Network / LogOn. Il ne représente pas l’ensemble du réseau LANL.
 
-## Fonctionnalités
-
-- **Vue de sécurité** : indicateurs cohérents avec les filtres, activité, répartition des décisions et événements à vérifier.
-- **Explorer les connexions** : filtres, recherche littérale et export CSV.
-- **Détection des anomalies** : évaluation manuelle avec historique causal, score et percentile relatif ; import de CSV fictifs validés.
-- **Simulation** : événements normaux, suspects ou aléatoires ; contexte explicite et réinitialisation de session.
-- **Performance** : matrice de confusion, précision, rappel, F1, accuracy, ROC-AUC, Average Precision, comparaison aux règles et sensibilité au seuil.
-
-L’interface réunit les fonctions dans quatre onglets : vue d’ensemble, exploration, performance et vérification (formulaire, import et simulation). Navigation brun foncé, fond beige, cartes arrondies et graphiques caramel. Aucun indicateur ne représente une mesure de trafic réel.
-
-## Technologies
-
-Python 3.11 (version testée), Pandas 2.3.3, NumPy 2.2.6, Scikit-learn 1.7.2, Streamlit 1.50.0, Plotly 6.3.1, Joblib 1.5.2 et pytest 8.4.2. Les versions directes sont fixées dans `requirements.txt`. Les outils du notebook sont également inclus. Python 3.12 est une cible compatible mais doit être vérifié dans son propre environnement.
-
-## Interface
-
-L’interface porte le nom LoginGuard AI. Les textes courants utilisent une taille de 17 px, les titres une police sans empattements en gras et les intitulés décrivent directement les fonctions.
-
-Refonte du 13 novembre 2026 inspirée de l’application fournie : bandeau, cartes et onglets sur un écran. Police Inter si installée, sinon Segoe UI ; aucun service de polices externe. Le modèle chronologique et les fonctions de validation restent ceux du projet.
-
-![Dashboard beige et brun](docs/screenshots/dashboard-beige.jpg)
-
-Les anciennes captures sont conservées comme archives.
+Les machines C… ne sont pas des IP. Dates civiles, fuseau et types physiques de terminaux ne sont pas publiés. L’heure affichée est relative, pas une heure locale permettant de conclure à une connexion nocturne.
 
 ## Installation Windows / VS Code
 
-Ouvrir un terminal PowerShell **dans ce dossier** :
+Ouvrir ce dossier dans VS Code, puis son terminal PowerShell :
 
 ```powershell
 py -3.11 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
-.\.venv\Scripts\python.exe -m src.generate_data
-.\.venv\Scripts\python.exe -m src.train_model
-.\.venv\Scripts\python.exe -m src.evaluate_model
-.\.venv\Scripts\python.exe -m pytest -q
+.\.venv\Scripts\python.exe -m src.import_lanl
+.\.venv\Scripts\python.exe -m src.lanl
 .\.venv\Scripts\python.exe -m streamlit run app.py --server.address 127.0.0.1
 ```
 
-Ouvrir [l’application locale](http://localhost:8501). Arrêter avec Ctrl+C. L’installation initiale télécharge les dépendances ; les données, l’entraînement et l’application ne font ensuite appel à aucun service externe.
+Sur ce PC, les données et le modèle existent déjà : seule la dernière commande est nécessaire. Aucune activation PowerShell ni privilège administrateur requis. `start.ps1` automatise ces étapes, sans télécharger de nouveau lorsque les fichiers existent.
 
-Alternative automatisée : `powershell -ExecutionPolicy Bypass -File .\start.ps1`. Cette option ne vaut que pour ce processus. Si les scripts PowerShell sont interdits, utiliser directement les commandes `python.exe` ci-dessus, sans activation et sans modifier la politique de sécurité. Dans VS Code, sélectionner `.venv\Scripts\python.exe` comme interpréteur et noyau du notebook.
+L’import initial télécharge environ 326 Mio compressés, parcourt environ 49 millions de lignes et conserve une cohorte intermédiaire avant sélection NTLM. Prévoir environ 1 Go libre et plusieurs minutes. Aucun accès externe n’est nécessaire ensuite. Les données et modèles sont exclus de Git ; les empreintes de provenance figurent dans `docs/lanl_results.json`.
 
-Les données et le modèle existants sont réutilisés au lancement. Pour une reconstruction volontaire :
+## Méthode et résultats exécutés
 
-```powershell
-.\.venv\Scripts\python.exe -m src.generate_data --force
-.\.venv\Scripts\python.exe -m src.train_model
-.\.venv\Scripts\python.exe -m src.evaluate_model
-```
+166 956 événements des deux premiers jours entraînent le modèle ; 76 291 du troisième jour servent au test. Sept variables : heure relative cyclique, tentatives et échecs antérieurs sur dix minutes, changement de source, nouveauté source et destination. Fenêtre [t−600, t[ ; les événements simultanés ne se voient pas mutuellement. Le contexte est limité aux événements sélectionnés. Aucun identifiant brut ou label n’entre dans le modèle.
 
-**Après toute régénération des données, réentraîner et réévaluer le modèle.** Ne jamais remplacer le fichier Joblib par un modèle d’origine inconnue : sa désérialisation n’est pas sûre pour des fichiers non fiables.
+200 arbres, contamination 1 %, seed 42. Les annotations ne servent ni à sélectionner les comptes, ni à entraîner, ni à fixer le seuil. `prediction=1` indique un score négatif de `decision_function` ; le score affiché est son opposé. Le percentile historique n’est pas une probabilité d’attaque.
 
-## Données et variables
+Les annotations red team sont **partielles** : non annoté ne signifie pas normal. Le test contient 11 événements annotés. Isolation Forest en détecte **1**, en manque **10**, et signale **198 événements non annotés** (199 alertes). Précision relative aux annotations : **0,50 %** ; rappel : **9,09 %** ; F1 : **0,95 %** ; ROC-AUC : **0,6700**. Le taux d’alertes parmi les non annotés est **0,2596 %**. L’accuracy de 99,73 % masque le faible rappel.
 
-12 000 événements, 400 utilisateurs fictifs, 60 jours, graine 42. Les trois CSV sont créés dans `data/` : jeu complet, train de 9 000 lignes et test de 3 000 lignes. Les rafales augmentent la proportion finale d’événements suspects ; elle est calculée dans le rapport de résultats.
+Le seuil simple de règles détecte 6/11 annotations mais alerte sur 71 062 non-annotés (93,16 %). Il est manifestement trop sensible à la fréquence des authentifications de service. Les résultats sont conservés tels quels ; aucune efficacité opérationnelle n’est revendiquée.
 
-| Champ | Signification |
-|---|---|
-| event_id, user_id | Identifiants fictifs, exclus du modèle |
-| timestamp, login_hour, day_of_week | Date UTC et composantes temporelles |
-| source_ip | Adresse privée/documentaire, exclue du modèle |
-| ip_changed, new_ip | Changement depuis la dernière IP et absence dans l’historique |
-| failed_attempts, attempts_10min | Échecs et tentatives antérieurs sur [t−10 min, t[ |
-| login_success | Résultat de la connexion courante |
-| device_type, is_new_device | Type de terminal et nouveauté du type dans l’historique |
-| anomaly_type, is_anomaly | Vérité terrain du simulateur, réservée à l’analyse/évaluation |
+## Utilisation
 
-Les événements simultanés ne se voient pas mutuellement. Les utilisateurs inconnus démarrent sans historique : « nouveau » signifie inconnu dans le contexte disponible. L’IP n’est jamais transformée en nombre ordinal.
-
-## Algorithme et évaluation
-
-Le pipeline médiane + Isolation Forest reçoit sept caractéristiques numériques : heure sin/cos, compteurs récents, changement et nouveauté IP, nouveauté du type de terminal. Il apprend sur tout l’historique d’entraînement majoritairement normal, sans utiliser les labels. Paramètres : 200 arbres, sous-échantillon 256, contamination 8 %, graine 42.
-
-`predict()` retourne +1 pour un inlier et −1 pour un outlier. Le système affiche 0 et 1. Le score présenté vaut `−decision_function` : un score strictement positif dépasse le seuil d’anomalie. Le percentile situe ce score dans le train ; **ce n’est pas une probabilité d’attaque**. Voir la [documentation officielle de l’algorithme](https://scikit-learn.org/1.7/modules/generated/sklearn.ensemble.IsolationForest.html).
-
-L’évaluation utilise les 25 % d’événements les plus récents. Les règles de référence déclenchent pour ≥3 échecs, ≥6 tentatives ou IP nouvelle avant 6 h. Les résultats réellement calculés sont dans [docs/results.md](docs/results.md) et la page Performance. Les JSON et CSV de calcul se trouvent dans `artifacts/`. Les variations de contamination sont descriptives et ne servent pas à optimiser sur le test.
+- Vue d’ensemble : filtres communs, statistiques calculées et graphiques.
+- Explorateur : recherche de comptes et machines, export CSV de la sélection.
+- Performance : test chronologique, matrice, comparaison avec règles et limites des annotations.
+- Vérification : saisie manuelle explicitement distincte du dataset, import CSV validé et relecture de véritables événements du test. Aucun générateur ne remplace les données absentes.
 
 ## Architecture
 
 ```text
-app.py                       Navigation Streamlit
-requirements.txt             Dépendances directes fixées
-start.ps1                    Installation et démarrage Windows
-.streamlit/config.toml        Thème et télémétrie désactivée
-src/
-  generate_data.py            Génération reproductible
-  preprocessing.py            Historique causal, validation, variables
-  train_model.py              Entraînement et persistance
-  evaluate_model.py           Mesures et baseline
-  predict.py                 Inférence et évaluation contextuelle
-  simulation.py              Scénarios interactifs
-  ui.py, utils.py             Composants communs et chemins
-pages/                       Les cinq pages du dashboard
-assets/style.css             Styles cohérents
-data/                        CSV générés localement, non versionnés
-models/                      Joblib local de confiance, non versionné
-artifacts/                   Résultats d’exécution, non versionnés
-tests/                       Tests unitaires et interactions Streamlit
-notebooks/                   Notebook explicatif exécutable
-scripts/                     Construction et vérification du notebook
-docs/                        Méthodologie, rapport, résultats, soutenance
+app.py                         # entrée du tableau de bord réel
+src/import_lanl.py             # téléchargement borné, sélection, annotations
+src/lanl.py                    # validation, historique, entraînement, inférence
+src/real_dashboard.py          # quatre onglets, formulaires, relecture
+assets/style.css              # thème beige / brun
+start.ps1                     # installation et lancement
+requirements.txt              # dépendances
+ data/lanl/                   # sources, CSV et métriques locaux (ignorés)
+models/lanl_isolation_forest.joblib
+ tests/test_lanl.py            # causalité, schéma, persistance et provenance
+ docs/lanl_results.json        # résultats calculés et empreintes
 ```
 
-## CSV et sécurité
+## Tests
 
-Importer uniquement des données fictives. Limites : 10 Mo et 100 000 lignes. Champs bruts requis : event_id, user_id, timestamp, source_ip, device_type, login_success. Les doublons, champs absents, dates/IP invalides et résultats non binaires sont rejetés. Les caractéristiques sont recalculées depuis le fichier importé, sans fusion implicite avec les utilisateurs locaux. L’import n’est pas sauvegardé et ne réentraîne pas le modèle. Les exports neutralisent les cellules textuelles pouvant être interprétées comme formules par un tableur.
+```powershell
+.\.venv\Scripts\python.exe -m pytest -q
+```
 
-Aucun mot de passe, jeton, donnée personnelle ou journal réel n’est nécessaire. Aucun modèle téléversé n’est accepté. Les environnements, outils téléchargés, secrets, CSV et modèles sont ignorés par Git.
+Les petits exemples écrits à la main dans les tests sont des fixtures de validation, pas le dataset d’apprentissage. Les anciens modules synthétiques et pages sont conservés pour compatibilité ; ils ne sont pas appelés par `app.py` ni `start.ps1`.
 
-## Notebook et documentation
+## Documents antérieurs
 
-- [Notebook en français](notebooks/anomaly_detection_explained.ipynb) : exploration, modèle, graphiques et comparaison.
-- [Méthodologie](docs/methodology.md) : fenêtres, conventions et intuition mathématique.
-- [Rapport](docs/report.md) : mini-projet rédigé et résultats vérifiables.
-- [Guide de soutenance](docs/presentation_guide.md) : parcours de 9 minutes et questions probables.
-- [Validation](docs/results.md) : valeurs et vérifications réellement exécutées.
+**Le PDF universitaire et les captures créés avant cette migration décrivent la version synthétique. Ils ne constituent pas un rapport de résultats LANL.** Leur mise à jour complète reste nécessaire. La référence actuelle est ce README et `docs/lanl_results.json`. L’ancienne documentation est conservée comme archive explicitement identifiée.
 
-Exécuter toutes les cellules sans ouvrir Jupyter : `.\.venv\Scripts\python.exe scripts/verify_notebook.py`.
-Le notebook exécuté est enregistré dans `artifacts/`. Pour mettre à jour le résumé chiffré après l’évaluation : `.\.venv\Scripts\python.exe scripts/write_results.py`.
+## Limites et pistes
 
-## Limites et améliorations
-
-Les données synthétiques ne représentent pas toute la diversité du terrain. Les règles peuvent mieux détecter les scénarios qui ont servi à concevoir le simulateur. Le modèle laisse passer certaines anomalies et peut signaler des événements légitimes. Il ne reconnaît pas les appareils physiques, n’apprend pas un profil individuel complet et ne gère pas automatiquement la dérive. Aucun mécanisme MFA réel ni blocage n’est implémenté.
-
-Améliorations possibles : validation chronologique supplémentaire, profils par utilisateur, meilleure simulation des réseaux partagés, données représentatives autorisées et étude du coût des erreurs. Cette application est un prototype universitaire, pas un dispositif de sécurité opérationnel.
-
-## GitHub et licence
-
-Dépôt public : [HajarLaziz/SentinelAI-Login-Anomaly-Detection](https://github.com/HajarLaziz/SentinelAI-Login-Anomaly-Detection). Les jalons de développement sont conservés dans des commits distincts. La licence reste à choisir explicitement ; aucune autorisation open source n’est présumée avant ce choix.
-
-Voir le [guide de publication et de vérification](docs/github.md) pour les prochaines contributions.
-
-## Rapport académique complet
-
-Le [rapport PDF FSSM 2026-2027](output/pdf/Rapport_LoginGuard_AI_FSSM_2026_2027.pdf) présente LoginGuard AI en 30 pages : architecture, pipeline, données, évaluation, captures et guide d’exécution. Les [sources du rapport](docs/rapport/README.md) permettent de le reconstruire.
+Annotations incomplètes, cohorte restreinte, seulement trois jours et onze annotations de test ; aucun déploiement de sécurité réel. Une anomalie ne prouve pas une attaque. Étendre la période, ajouter un jeu de validation temporel indépendant et étudier les profils par compte avant toute optimisation du seuil. L’application recommande une vérification mais n’exécute pas de MFA.
