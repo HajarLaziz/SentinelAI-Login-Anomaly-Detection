@@ -95,9 +95,17 @@ def train(frame,path=MODEL):
 
 
 def predict(frame,bundle):
-    out=frame.copy();X=matrix(frame);pipe=bundle['pipeline']
-    out['prediction']=(pipe.predict(X)==-1).astype(int)
-    out['anomaly_score']=-pipe.decision_function(X)
+    out=frame.copy()
+    if 'context_model' in bundle:
+        model=bundle['context_model']
+        if (frame.time<=model.train_end).any():
+            raise ValueError('Le modèle contextuel nécessite un événement postérieur au jour de référence J+0.')
+        out['prediction']=model.predict(frame)
+        out['anomaly_score']=model.score(frame)-model.threshold
+    else:
+        X=matrix(frame);pipe=bundle['pipeline']
+        out['prediction']=(pipe.predict(X)==-1).astype(int)
+        out['anomaly_score']=-pipe.decision_function(X)
     out['relative_percentile']=np.searchsorted(bundle['reference_scores'],out.anomaly_score,side='right')/len(bundle['reference_scores'])*100
     out['status']=np.where(out.prediction==1,'À vérifier','Habituel')
     out['recommendation']=np.where(out.prediction==1,'Vérification complémentaire recommandée.','Aucun dépassement du seuil ; absence d’attaque non garantie.')
@@ -131,7 +139,7 @@ def baseline(frame):
 
 def evaluate(frame,bundle):
     scored=predict(frame,bundle)
-    result={'Isolation Forest':metrics(frame.redteam_label,scored.prediction,scored.anomaly_score),
+    result={bundle.get('model_name','Isolation Forest'):metrics(frame.redteam_label,scored.prediction,scored.anomaly_score),
             'Règles':metrics(frame.redteam_label,baseline(frame))}
     return result
 

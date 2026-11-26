@@ -17,12 +17,21 @@ LABELS={'event_id':'Événement source','user_id':'Compte anonymisé','source_ho
         'relative_percentile':'Percentile historique','history_events':'Événements antérieurs'}
 
 @st.cache_resource
-def bundle_cached(version): return joblib.load(lanl.MODEL)
+def bundle_cached(version,model_name='Isolation Forest'):
+    if model_name=='Rareté contextuelle':
+        model=joblib.load(lanl.ROOT/'models/lanl_context_candidate.joblib')
+        return dict(context_model=model,model_name=model_name,reference_scores=model.reference_scores,
+                    dataset='LANL',scope='Référence J+0 ; validation J+1 ; test J+2',
+                    features=['Rareté compte/source','Rareté compte/destination','Rareté source/destination'],
+                    train_end=model.train_end,threshold=model.threshold)
+    return joblib.load(lanl.MODEL)
 
 @st.cache_data
-def resources(data_version,model_version):
+def resources(data_version,model_version,model_name='Isolation Forest'):
     frame=pd.read_csv(lanl.DATA/'login_logs.csv')
-    return lanl.predict(frame,bundle_cached(model_version))
+    bundle=bundle_cached(model_version,model_name)
+    if 'context_model' in bundle:frame=frame[frame.time>bundle['train_end']]
+    return lanl.predict(frame,bundle)
 
 def table(frame,key,limit=1000):
     columns=[c for c in ['event_id','user_id','relative_time','source_host','destination_host','outcome',
@@ -51,7 +60,7 @@ def performance(data,bundle):
     result=lanl.evaluate(test,bundle)
     st.info('Les annotations LANL identifient des actions red team connues. Un événement non annoté n’est pas une preuve de comportement normal. Les métriques ci-dessous sont relatives à ces annotations partielles.')
     st.caption(f'{len(test):,} événements de test · {test.redteam_label.sum()} annotés red team · aucun entraînement sur ce jour.')
-    score=result['Isolation Forest']
+    score=result[bundle.get('model_name','Isolation Forest')]
     cols=st.columns(4)
     for col,key,title in zip(cols,['precision','recall','f1','false_positive_rate'],['Précision / annotations','Rappel red team','F1 / annotations','Alertes parmi non annotés']):
         col.metric(title,f'{score[key]:.3f}' if score[key] is not None else 'Non disponible')
@@ -61,12 +70,12 @@ def performance(data,bundle):
     with a: chart(px.imshow(score['confusion_matrix'],x=['Habituel','À vérifier'],y=['Non annoté','Red team'],text_auto=True,title='Décisions et annotations'),accent='indigo')
     with b:
         comp=pd.DataFrame(result).T[['precision','recall','f1']].reset_index().melt(id_vars='index')
-        chart(px.bar(comp,x='variable',y='value',color='index',barmode='group',title='Forêt et règles sur le même test'),accent='turquoise')
+        chart(px.bar(comp,x='variable',y='value',color='index',barmode='group',title='Modèle et règles sur le même test'),accent='turquoise')
     st.dataframe(pd.DataFrame(result).T.drop(columns='confusion_matrix'),width='stretch')
     chart(px.histogram(test,x='anomaly_score',color=test.redteam_label.map({0:'Non annoté',1:'Red team'}),barmode='overlay',nbins=60,title='Distribution des scores de test'),accent='rose')
-    st.caption('ROC-AUC, AP et PR-AUC sont fondées sur le score continu, jamais sur une probabilité calibrée. La contamination de 1 % a été fixée avant cette évaluation, sans optimisation sur le test.')
+    st.caption('ROC-AUC, AP et PR-AUC portent sur un score, pas une probabilité. Pour la rareté contextuelle : référence J+0 figée, choix du seuil sur J+1 uniquement. Onze annotations sur J+2 ne suffisent pas à garantir la généralisation.')
     with st.expander('Configuration et provenance'):
-        st.json({k:bundle[k] for k in ['dataset','scope','features','training_rows','train_end','contamination','n_estimators']})
+        st.json({k:bundle[k] for k in ['dataset','scope','features','training_rows','train_end','contamination','n_estimators','threshold'] if k in bundle})
         st.markdown('[Source officielle LANL](https://csr.lanl.gov/data/cyber1/) · DOI : 10.17021/1179829')
 
 def verify(data,bundle):
@@ -91,7 +100,9 @@ def verify(data,bundle):
                 table(result,'manual_real')
             except (ValueError,TypeError) as exc:st.error(str(exc))
     with upload:
-        st.info('CSV de même schéma : event_id, time, user_id, source_host, destination_host, outcome. Temps en secondes relatives ; machines C… ; comptes U…@domaine. Contexte du fichier uniquement. 10 Mo maximum.')
+        st.info('CSV de même schéma : event_id, time, user_id, source_host, destination_host, outcome. Temps en secondes relatives ; machines C… ; comptes U…@domaine. Compteurs récents calculés dans le fichier. 10 Mo maximum.')
+        if 'context_model' in bundle:
+            st.caption('Pour la rareté contextuelle, les fréquences de référence restent celles de J+0 LANL ; seuls les compteurs récents sont recalculés dans le CSV. Les temps doivent être postérieurs à J+0 et les identifiants appartenir au même espace anonymisé.')
         file=st.file_uploader('Journal à évaluer',type=['csv'])
         if file:
             try:
@@ -126,13 +137,17 @@ def render():
     if not (lanl.DATA/'login_logs.csv').exists() or not lanl.MODEL.exists():
         st.error('Données réelles ou modèle absents. Exécutez python -m src.import_lanl puis python -m src.lanl. Aucun jeu synthétique n’est chargé en remplacement.')
         st.stop()
-    version=lanl.MODEL.stat().st_mtime_ns;bundle=bundle_cached(version)
-    data=resources((lanl.DATA/'login_logs.csv').stat().st_mtime_ns,version)
+    context_path=lanl.ROOT/'models/lanl_context_candidate.joblib'
+    options=['Rareté contextuelle','Isolation Forest'] if context_path.exists() else ['Isolation Forest']
+    model_name=st.sidebar.selectbox('Modèle de détection',options,key='detection_model')
+    model_path=context_path if model_name=='Rareté contextuelle' else lanl.MODEL
+    version=model_path.stat().st_mtime_ns;bundle=bundle_cached(version,model_name)
+    data=resources((lanl.DATA/'login_logs.csv').stat().st_mtime_ns,version,model_name)
     manifest=json.loads((lanl.DATA/'prepared_manifest.json').read_text(encoding='utf-8'))
     with st.sidebar:
         st.markdown('<div class="sidebar-brand"><strong>LoginGuard AI</strong></div><div class="sidebar-subtitle">Authentifications réelles<br>LANL · données anonymisées</div>',unsafe_allow_html=True)
         st.markdown('<div class="sidebar-label">MODÈLE DE DÉTECTION</div>',unsafe_allow_html=True)
-        st.selectbox('Modèle',['Isolation Forest'],disabled=True,label_visibility='collapsed')
+        st.caption(model_name)
         st.markdown('<div class="sidebar-label">HISTORIQUE AFFICHÉ</div>',unsafe_allow_html=True)
         st.slider('Nombre de connexions',100,len(data),len(data),key='real_limit')
         st.slider('Heures relatives',0,23,(0,23),key='real_hours')
@@ -140,7 +155,8 @@ def render():
         st.slider('Percentile minimum',0,100,0,key='real_percentile',help='Filtre d’affichage, pas une probabilité ni un changement de seuil.')
         st.markdown('<div class="sidebar-note">Filtres : vue d’ensemble et explorateur.<br>Dates, IP et types de terminaux non publiés par la source.</div>',unsafe_allow_html=True)
         st.caption('Source : LANL · DOI 10.17021/1179829')
-    st.markdown('<div class="hero"><div class="eyebrow">AUTHENTIFICATIONS RÉELLES · LANL</div><h1>LoginGuard AI</h1><p>Observer les connexions, examiner les alertes et relire des événements anonymisés d’un réseau d’entreprise.</p><span class="chip">Isolation Forest · modèle local</span><span class="chip">NTLM / Network / LogOn · 3 jours relatifs</span></div>',unsafe_allow_html=True)
+    st.markdown('<div class="hero"><div class="eyebrow">AUTHENTIFICATIONS RÉELLES · LANL</div><h1>LoginGuard AI</h1><p>Observer les connexions, examiner les alertes et relire des événements anonymisés d’un réseau d’entreprise.</p><span class="chip">'+model_name+' · modèle local</span><span class="chip">NTLM / Network / LogOn</span></div>',unsafe_allow_html=True)
+    if model_name=='Rareté contextuelle':st.caption('J+0 sert de référence fixe. Le tableau affiche J+1 et J+2 uniquement, pour ne pas analyser une connexion avec un historique futur. Score = rareté − seuil ; une valeur positive déclenche une alerte.')
     st.caption('La date réelle et le fuseau horaire ne sont pas publiés. J+0 désigne le début du jeu ; « heure relative » ne signifie pas heure locale. Aucun identifiant de machine n’est présenté comme une adresse IP.')
     summary,explorer,quality,verification=st.tabs(['Vue d’ensemble','Explorer les connexions','Performance du modèle','Vérifier une connexion'])
     with summary:

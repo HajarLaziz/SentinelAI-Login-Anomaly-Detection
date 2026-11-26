@@ -2,6 +2,12 @@
 
 Tableau de bord local de détection des connexions inhabituelles avec Isolation Forest, Python, Pandas, Scikit-learn, Streamlit et Plotly.
 
+Le tableau de bord propose aussi un **détecteur de rareté contextuelle** fondé
+sur les habitudes compte–machine. Sur J+2 : 11 annotations détectées sur 11,
+347 alertes, précision relative aux annotations de 3,17 %. Ce rappel ne garantit
+pas la généralisation : le test ne contient que 11 annotations partielles.
+Voir [le protocole et les résultats comparés](docs/context_model.md).
+
 ## Dataset réellement utilisé
 
 [Comprehensive, Multi-Source Cyber-Security Events, LANL](https://csr.lanl.gov/data/cyber1/), Alexander D. Kent (2015), DOI **10.17021/1179829**. Journaux d’entreprise collectés et anonymisés, téléchargés depuis le miroir académique Imperial College. Aucun événement synthétique n’alimente le tableau de bord.
@@ -19,6 +25,7 @@ py -3.11 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 .\.venv\Scripts\python.exe -m src.import_lanl
 .\.venv\Scripts\python.exe -m src.lanl
+.\.venv\Scripts\python.exe -m src.compare_models
 .\.venv\Scripts\python.exe -m streamlit run app.py --server.address 127.0.0.1
 ```
 

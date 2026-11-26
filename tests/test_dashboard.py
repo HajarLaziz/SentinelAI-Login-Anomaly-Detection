@@ -61,4 +61,11 @@ def test_sidebar_filters_update_overview():
     assert app.metric[0].value == '500'
     app.slider(key='real_percentile').set_value(100).run()
     assert not app.exception
-    assert not app.exception
+
+
+def test_model_selector():
+    app = AppTest.from_file(str(ROOT/'app.py'), default_timeout=90).run()
+    selector=app.selectbox(key='detection_model')
+    for name in selector.options:
+        app.selectbox(key='detection_model').select(name).run()
+        assert not app.exception
